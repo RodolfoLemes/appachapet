@@ -16,9 +16,10 @@ const activityStyles = StyleSheet.create({
 
     topInfo: {
         height: 100,
-        width: '90%',
+        width: '85%',
         flexDirection: 'row',
         marginTop: 50,
+        marginLeft: '5%',
     },
 
     topInfoImg: {
@@ -45,23 +46,61 @@ const activityStyles = StyleSheet.create({
     },
 
     topInfoTextsTitleFont: {
-        fontSize: 22,
+        fontSize: 24,
         fontWeight: 'bold',
     },
 
     topInfoTextsSubtitleFont: {
-        fontSize: 18,
+        fontSize: 16,
 	},
 	
-	MiddleInfo: {
-        height: responsiveHeight(60),
-        width: responsiveWidth(90),
-        flexDirection: 'row',
+	middleInfo: {
+        height: responsiveHeight(30),
+        width: responsiveWidth(75),
 		marginTop: responsiveHeight(5),
-		backgroundColor: '#2147D6',
-		justifyContent: 'center',
-		borderRadius: 10,
-	},
+    },
+    
+    middleInfoLabel: {
+        height: '20%',
+        width: '100%',
+        justifyContent: 'center',
+    },
+
+    middleInfoInformation: {
+        height: '45%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    middleInfoPack: {
+        height: '35%',
+        width: '100%',
+        flexDirection: 'row',
+    },
+
+    middleInfoPackView: {
+        height: '100%',
+        flex: 1,
+        paddingLeft: '5%',
+    },
+
+    middleInfoLabelText: {
+        fontSize: 18,
+    },
+
+    middleInfoInformationText: {
+        fontSize: 52,
+    },
+
+    middleInfoPackTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+
+    middleInfoPackSubtitle: {
+        fontSize: 18,
+    },
 	
 	mapStyle: {
 		flex:1,

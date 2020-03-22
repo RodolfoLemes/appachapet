@@ -16,10 +16,10 @@ function Activity() {
     		<View style={ activityStyles.topInfo }>
         		<View style={ activityStyles.topInfoTexts }>
           			<View style={ activityStyles.topInfoTextsTitle }>
-            			<Text style={ activityStyles.topInfoTextsTitleFont }>Olá, Humano.</Text>
+            			<Text style={ activityStyles.topInfoTextsTitleFont }>Olá, Humano</Text>
           			</View>
           			<View style={ activityStyles.topInfoTextsSubtitle }>
-            			<Text style={ activityStyles.topInfoTextsSubtitleitleFont }>Eu preciso correr!</Text>
+            			<Text style={ activityStyles.topInfoTextsSubtitleFont }>Eu preciso correr!</Text>
           			</View>
         		</View>
         		<View style={ activityStyles.topInfoImg }>
@@ -29,8 +29,39 @@ function Activity() {
           			/>
         		</View>
     	  	</View>
-	  		<View style= { activityStyles.MiddleInfo }>
-			
+	  		<View style= { activityStyles.middleInfo }>
+				<View style={ activityStyles.middleInfoLabel }>
+					<Text style={ activityStyles.middleInfoLabelText }>Distância percorrida</Text>
+				</View>
+				<View style={ activityStyles.middleInfoInformation }>
+					<Text style={ activityStyles.middleInfoInformationText }>750 metros</Text>
+				</View>
+				<View style={ activityStyles.middleInfoPack }>
+					<View style={ activityStyles.middleInfoPackView }>
+						<View style={{ flex: 1, justifyContent: 'center' }}>
+							<Text style={ activityStyles.middleInfoPackTitle }>Calorias</Text>
+						</View>
+						<View style={{ flex: 1 }}>
+							<Text style={ activityStyles.middleInfoPackSubtitle }>200</Text>
+						</View>
+					</View>
+					<View style={ activityStyles.middleInfoPackView }>
+						<View style={{ flex: 1, justifyContent: 'center' }}>
+							<Text style={ activityStyles.middleInfoPackTitle }>Passos</Text>
+						</View>
+						<View style={{ flex: 1 }}>
+							<Text style={ activityStyles.middleInfoPackSubtitle }>150</Text>
+						</View>
+					</View>
+					<View style={ activityStyles.middleInfoPackView }>
+						<View style={{ flex: 1, justifyContent: 'center' }}>
+							<Text style={ activityStyles.middleInfoPackTitle }>Tempo</Text>
+						</View>
+						<View style={{ flex: 1 }}>
+							<Text style={ activityStyles.middleInfoPackSubtitle }>30 min</Text>
+						</View>
+					</View>
+				</View>
 			</View>
 		</SafeAreaView>
 	);
@@ -103,13 +134,13 @@ export default function App() {
 					: 'ios-paw';
 					}
 
-				return <Ionicons name={iconName} size={35} color={color} />;
+				return <Ionicons name={iconName} size={55} color={color} />;
 				},
 		  	})}
 		  	tabBarOptions={{
 				activeTintColor: '#2147D6',
 			    inactiveTintColor: 'gray',
-				style: {elevation:0, borderTopWidth: 0, shadowOpacity:0},
+				style: {height: 70, elevation:0, borderTopWidth: 0, shadowOpacity:0},
             }}
 			>
 		  	<Tab.Screen name="Atividade" component={Activity} />
