@@ -101,6 +101,11 @@ const activityStyles = StyleSheet.create({
     middleInfoPackSubtitle: {
         fontSize: 18,
     },
+
+    chartInfo: {
+        height: responsiveHeight(30),
+        width: responsiveWidth(90),
+    },
 	
 	mapStyle: {
 		flex:1,

@@ -1,14 +1,39 @@
 import * as React from 'react';
 import { Text, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import {MapView} from 'react-native-maps';
+import MapView from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { BarChart } from 'react-native-chart-kit';
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+
 
 import activityStyles from './src/styles/activityStyles';
 import gpsStyles from './src/styles/gpsStyles';
 import dataStyles from './src/styles/dataStyles';
+
+const data = {
+    labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"],
+    datasets: [
+      {
+		data: [20, 45, 28, 55, 70, 43, 15],
+	  },
+	],
+  };
+
+const chartConfig = {
+    backgroundGradientFrom: "#FFF",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: "#FFF", 
+	backgroundGradientToOpacity: 0,
+	fillShadowGradient: 'rgb(33, 71, 214)',
+	fillShadowGradientOpacity: 1,
+	barRadius: 8,
+	strokeWidth: 0,
+    color: (opacity = 1) => `rgba(33, 71, 214, ${opacity})`,
+	barPercentage: 0.5,
+};
 
 function Activity() {
 	return (
@@ -63,38 +88,50 @@ function Activity() {
 					</View>
 				</View>
 			</View>
+			<View style={ activityStyles.chartInfo }>
+				<BarChart
+					data={data}
+					width={responsiveWidth(90)}
+					height={responsiveHeight(30)}
+					chartConfig={chartConfig}
+					showBarTops={false}
+					withInnerLines={false}
+					fromZero={true}
+					/>
+			</View>
 		</SafeAreaView>
 	);
 }
 
 function Gps() {
-  	return (
+	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ activityStyles.container }>
-			<View style={ activityStyles.topInfo }>
-				<View style={ activityStyles.topInfoTexts }>
-						<View style={ activityStyles.topInfoTextsTitle }>
-						<Text style={ activityStyles.topInfoTextsTitleFont }>Quer me saber onde estou?</Text>
-						</View>
-						<View style={ activityStyles.topInfoTextsSubtitle }>
-						<Text style={ activityStyles.topInfoTextsSubtitleitleFont }>Estou em casa.</Text>
-						</View>
-				</View>
-				<View style={ activityStyles.topInfoImg }>
-						<Image
-					style={ activityStyles.topInfoImg }
-					source={require('./src/assets/dog.jpg')}
-						/>
-				</View>
-			</View>
-			<View style={ activityStyles.MiddleInfo }>
-				<MapView style={ activityStyles.mapStyle }
-				initialRegion={{ latitude: -23.0000, longitude: -51.0000, latitudeDelta: 0.0922, longitudeDelta: 0.0421,}} >
-				{/* <MapView.Marker
-            	coordinate={{latitude: -23.0000, longitude: -51.0000}}
-            	title={'teste'}
-            	description={'teste'}
-         		/> */}
-				</MapView>
+    		<View style={ activityStyles.topInfo }>
+        		<View style={ activityStyles.topInfoTexts }>
+          			<View style={ activityStyles.topInfoTextsTitle }>
+            			<Text style={ activityStyles.topInfoTextsTitleFont }>Tudo certo</Text>
+          			</View>
+          			<View style={ activityStyles.topInfoTextsSubtitle }>
+            			<Text style={ activityStyles.topInfoTextsSubtitleFont }>Estou em casa</Text>
+          			</View>
+        		</View>
+        		<View style={ activityStyles.topInfoImg }>
+          			<Image
+            		style={ activityStyles.topInfoImg }
+            		source={require('./src/assets/dog.jpg')}
+          			/>
+        		</View>
+    	  	</View>
+	  		<View style= { activityStyles.middleInfo }>
+				<MapView
+				style={activityStyles.middleInfo}
+				initialRegion={{
+				latitude: -23,
+				longitude: -51,
+				latitudeDelta: 0.9222,
+				longitudeDelta: 0.4211,
+				}}
+				/>
 			</View>
 		</SafeAreaView>
 	);
@@ -117,31 +154,30 @@ export default function App() {
 		<Tab.Navigator
 		  	screenOptions={({ route }) => ({
 			tabBarIcon: ({ focused, color, size }) => {
-				  let iconName;
+				let iconName;
 			  	if (route.name === 'Atividade') {
 					iconName = focused
-				  	? 'ios-podium'
-					: 'ios-podium';
+				  	? 'chart-line'
+					: 'chart-line';
 				} 
 				else if (route.name === 'GPS') {
 					iconName = focused 
-					? 'ios-pin' 
-					: 'ios-pin';
+					? 'map-marker' 
+					: 'map-marker';
 				}
 				else if (route.name === 'Dados') {
 					iconName = focused 
-					? 'ios-paw' 
-					: 'ios-paw';
+					? 'paw' 
+					: 'paw';
 					}
-
-				return <Ionicons name={iconName} size={55} color={color} />;
-				},
-		  	})}
+				return < MaterialCommunityIcons name={iconName} size={50} color={color} />
+				}}
+			)}
 		  	tabBarOptions={{
 				activeTintColor: '#2147D6',
-			    inactiveTintColor: 'gray',
-				style: {height: 70, elevation:0, borderTopWidth: 0, shadowOpacity:0},
-            }}
+			  inactiveTintColor: 'gray',
+				style: {height: 70, elevation:0, borderTopWidth: 0, shadowOpacity:0, marginBottom: 5},
+			}}
 			>
 		  	<Tab.Screen name="Atividade" component={Activity} />
 		  	<Tab.Screen name="GPS" component={Gps} />
