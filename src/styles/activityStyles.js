@@ -106,10 +106,6 @@ const activityStyles = StyleSheet.create({
         height: responsiveHeight(30),
         width: responsiveWidth(90),
     },
-	
-	mapStyle: {
-		flex:1,
-	},
 })
 
 export default activityStyles;

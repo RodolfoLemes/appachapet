@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -105,33 +106,39 @@ function Activity() {
 
 function Gps() {
 	return (
-		<SafeAreaView forceInset={{top: 'always'}} style={ activityStyles.container }>
-    		<View style={ activityStyles.topInfo }>
-        		<View style={ activityStyles.topInfoTexts }>
-          			<View style={ activityStyles.topInfoTextsTitle }>
-            			<Text style={ activityStyles.topInfoTextsTitleFont }>Tudo certo</Text>
+		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
+    		<View style={ gpsStyles.topInfo }>
+        		<View style={ gpsStyles.topInfoTexts }>
+          			<View style={ gpsStyles.topInfoTextsTitle }>
+            			<Text style={ gpsStyles.topInfoTextsTitleFont }>Tudo certo</Text>
           			</View>
-          			<View style={ activityStyles.topInfoTextsSubtitle }>
-            			<Text style={ activityStyles.topInfoTextsSubtitleFont }>Estou em casa</Text>
+          			<View style={ gpsStyles.topInfoTextsSubtitle }>
+            			<Text style={ gpsStyles.topInfoTextsSubtitleFont }>Estou em casa</Text>
           			</View>
         		</View>
-        		<View style={ activityStyles.topInfoImg }>
+        		<View style={ gpsStyles.topInfoImg }>
           			<Image
-            		style={ activityStyles.topInfoImg }
-            		source={require('./src/assets/dog.jpg')}
+            		style={ gpsStyles.topInfoImg }
+            		source={ require('./src/assets/dog.jpg') }
           			/>
         		</View>
     	  	</View>
-	  		<View style= { activityStyles.middleInfo }>
+	  		<View style= { gpsStyles.middleInfo }>
 				<MapView
-				style={activityStyles.middleInfo}
+				style={gpsStyles.mapStyle}
 				initialRegion={{
-				latitude: -23,
-				longitude: -51,
-				latitudeDelta: 0.9222,
-				longitudeDelta: 0.4211,
+				latitude: -23.4227395,
+				longitude: -51.9375501,
+				latitudeDelta: 0.0022,
+				longitudeDelta: 0.0091,
 				}}
+				>
+				<Marker
+				style={ gpsStyles.topInfoImg }
+				coordinate={{latitude: -23.4227395, longitude: -51.9375501}}
+				image={require('./src/assets/dog-marker.png')}
 				/>
+				</MapView>
 			</View>
 		</SafeAreaView>
 	);
