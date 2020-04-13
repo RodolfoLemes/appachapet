@@ -6,7 +6,10 @@ import axios from 'axios';
 ** Simulador IOS:           http://localhost:3333/
 */
 const api = axios.create({
-  baseURL: 'http://localhost:3333/',
+	baseURL: 'https://achapet.herokuapp.com/',
+	headers: {
+        'Content-Type': 'application/json',
+    }
 });
 
 export default api;
