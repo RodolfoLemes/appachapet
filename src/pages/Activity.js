@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { BarChart } from 'react-native-chart-kit';
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 import activityStyles from '../styles/activityStyles';
 
