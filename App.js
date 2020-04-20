@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { createStackNavigator } from '@react-navigation/stack';
 
+import Login from './src/pages/Login'
+import Device from './src/pages/Device'
 import Activity from './src/pages/Activity'
 import Gps from './src/pages/Gps'
 import Data from './src/pages/Data'
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+function TabNavigation() {
 	return (
-	  	<NavigationContainer>
-			<Tab.Navigator
+		<Tab.Navigator
 				screenOptions={({ route }) => ({
 					tabBarIcon: ({ focused, color, size }) => {
 						let iconName;
@@ -43,7 +46,34 @@ export default function App() {
 				<Tab.Screen name="Atividade" component={Activity} />
 				<Tab.Screen name="GPS" component={Gps} />
 				<Tab.Screen name="Dados" component={Data} />
-			</Tab.Navigator>
-	  	</NavigationContainer>
+		</Tab.Navigator>
+	)
+}
+
+const Stack = createStackNavigator()
+
+function StackNavigation() {
+	return (
+		<NavigationContainer>
+			<Stack.Navigator>
+				<Stack.Screen name='Device' component={Device} />
+				<Stack.Screen name='TabNavigation' component={TabNavigation} />
+			</Stack.Navigator>
+		</NavigationContainer>
+	)
+}
+
+const Switch = createSwitchNavigator({
+	Login,
+	StackNavigation
+}, {
+	initialRouteName: 'Login'
+})
+
+const Container = createAppContainer(Switch)
+
+export default function App() {
+	return (
+		<Container />
 	);
 }
