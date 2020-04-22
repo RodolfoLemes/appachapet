@@ -2,17 +2,13 @@ import * as React from 'react';
 import { Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
+import Login from './Login';
 import deviceStyles from '../styles/deviceStyles';
 
 export default function Data({ navigation }) {
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ deviceStyles.container }>
-			<View>
-				<TouchableOpacity onPress={() => navigation.navigate('TabNavigation')}>
-					<Text>Entrar para devices</Text>
-				</TouchableOpacity>
-			</View>
-			<TouchableOpacity style={ deviceStyles.itemTcb }>
+			<TouchableOpacity onPress={() => navigation.navigate('TabNavigation')} style={ deviceStyles.itemTcb }>
 				<View style={ deviceStyles.itemImgView }>
 				<Image
             		style={ deviceStyles.itemImg }
@@ -28,6 +24,11 @@ export default function Data({ navigation }) {
 					</View>
 				</View>
 			</TouchableOpacity>
+			<View>
+				<TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
+					<Text>Voltar para Login</Text>
+				</TouchableOpacity>
+			</View>
 		</SafeAreaView>
 	);
 }

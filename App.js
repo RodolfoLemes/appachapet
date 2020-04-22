@@ -63,12 +63,14 @@ function StackNavigation() {
 	)
 }
 
+
 const Switch = createSwitchNavigator({
 	Login,
 	StackNavigation
 }, {
 	initialRouteName: 'Login'
 })
+
 
 const Container = createAppContainer(Switch)
 
