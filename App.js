@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -56,24 +57,19 @@ function StackNavigation() {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
-				<Stack.Screen name='Device' component={Device} />
+				<Stack.Screen options={{ headerShown: false }} name='Login' component={Login} />
+				<Stack.Screen 
+					name='Device' 
+					component={Device} 
+				/>
 				<Stack.Screen name='TabNavigation' component={TabNavigation} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
 }
 
-const Switch = createSwitchNavigator({
-	Login,
-	StackNavigation
-}, {
-	initialRouteName: 'Login'
-})
-
-const Container = createAppContainer(Switch)
-
 export default function App() {
 	return (
-		<Container />
+		<StackNavigation />
 	);
 }

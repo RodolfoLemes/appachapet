@@ -28,7 +28,8 @@ const chartConfig = {
 	barPercentage: 0.5,
 };
 
-export default function Activity() {
+export default function Activity({ route }) {
+	console.log(route.params)
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ activityStyles.container }>
     		<View style={ activityStyles.topInfo }>

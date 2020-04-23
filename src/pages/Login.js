@@ -12,17 +12,20 @@ async function logIn() {
 		androidClientId: `AIzaSyD_uuPh0IdO0MHLLHloIjcjkeqppBS9uE8`,
 		iosStandaloneAppClientId: `<YOUR_IOS_CLIENT_ID>`,
 		androidStandaloneAppClientId: `<YOUR_ANDROID_CLIENT_ID>`,
-	  });
+	});
 
 	if (type === 'success') {
 		let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-		headers: { Authorization: `Bearer ${accessToken}` },
+			headers: { 
+				Authorization: `Bearer ${accessToken}` 
+			},
 		});
 		navigation.navigate('StackNavigation')
 	}
 }
 
-export default function Login({ navigation }) {
+export default function Login({ navigation, route }) {
+	console.log(route.name)
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
 			<View style={ loginStyles.logoView }>
@@ -32,7 +35,7 @@ export default function Login({ navigation }) {
 				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => logIn()}>
 					<Text style={ loginStyles.googleTxt }>Entrar com Google</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => navigation.navigate('StackNavigation')}>
+				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => navigation.navigate('Device')}>
 					<Text style={ loginStyles.googleTxt }>Pular Login</Text>
 				</TouchableOpacity>
 			</View>
