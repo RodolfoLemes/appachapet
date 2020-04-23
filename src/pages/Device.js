@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, View, Image, TouchableOpacity, Button} from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
+import Login from './Login';
 import deviceStyles from '../styles/deviceStyles';
 
 export default function Device({ navigation, route }) {
@@ -39,6 +40,11 @@ export default function Device({ navigation, route }) {
 					</View>
 				</View>
 			</TouchableOpacity>
+			<View>
+				<TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
+					<Text>Voltar para Login</Text>
+				</TouchableOpacity>
+			</View>
 		</SafeAreaView>
 	);
 }
