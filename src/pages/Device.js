@@ -8,13 +8,13 @@ import deviceStyles from '../styles/deviceStyles';
 export default function Device({ navigation, route }) {
 
 	// Esse hook é responsavel por criar o botão do Logout
-	React.useLayoutEffect(() => {
+/* 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 		  headerLeft: () => (
 			<Button onPress={() => navigation.navigate('Login')} title="Logout" />
 		  ),
 		});
-	}, [navigation]);
+	}, [navigation]); */
 	
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ deviceStyles.container }>

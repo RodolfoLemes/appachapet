@@ -59,10 +59,11 @@ function StackNavigation() {
 			<Stack.Navigator>
 				<Stack.Screen options={{ headerShown: false }} name='Login' component={Login} />
 				<Stack.Screen 
+					options={{ headerShown: false }}
 					name='Device' 
 					component={Device} 
 				/>
-				<Stack.Screen name='TabNavigation' component={TabNavigation} />
+				<Stack.Screen name='TabNavigation' options={{ headerShown: false }} component={TabNavigation} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
