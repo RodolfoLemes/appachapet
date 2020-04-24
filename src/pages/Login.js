@@ -10,7 +10,7 @@ import loginStyles from '../styles/loginStyles'
 async function signInWithGoogleAsync() {
 	try {
 	  const result = await Google.logInAsync({
-		androidClientId: '1030550440349-0qdrot381qird967r75m39628dhn5icm.apps.googleusercontent.com',
+		androidClientId: '1030550440349-r3nctpkvrp0ajjjjoh4b2ll9pgvirptc.apps.googleusercontent.com',
 		scopes: ['profile', 'email'],
 	  });
   
