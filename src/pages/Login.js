@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import * as Google from 'expo-google-app-auth';
+import Svg from 'react-native-svg'
 
 import loginStyles from '../styles/loginStyles'
+import Logo from '../../assets/logo.svg'
 
 async function signInWithGoogleAsync() {
 	try {
@@ -28,7 +30,9 @@ export default function Login({ navigation, route }) {
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
 			<View style={ loginStyles.logoView }>
-
+				{/* <Svg>
+					<Logo />
+				</Svg> */}
 			</View>
 			<View style={ loginStyles.bottomView }>
 				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => signInWithGoogleAsync()}>
