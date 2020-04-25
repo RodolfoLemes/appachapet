@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import * as Google from 'expo-google-app-auth';
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 import AuthContext from '../contexts/auth'
 import loginStyles from '../styles/loginStyles'
 
+
 async function signInWithGoogleAsync() {
 	try {
 	  const result = await Google.logInAsync({
-		androidClientId: '1030550440349-0qdrot381qird967r75m39628dhn5icm.apps.googleusercontent.com',
+		androidClientId: '1030550440349-r3nctpkvrp0ajjjjoh4b2ll9pgvirptc.apps.googleusercontent.com',
 		scopes: ['profile', 'email'],
 	  });
   
@@ -34,7 +36,10 @@ export default function Login() {
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
 			<View style={ loginStyles.logoView }>
-
+				<Image
+					style={ loginStyles.logoViewImg }
+					source={require('../../assets/logo.png')}
+				/>
 			</View>
 			<View style={ loginStyles.bottomView }>
 				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => signInWithGoogleAsync()}>

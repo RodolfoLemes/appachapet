@@ -21,6 +21,12 @@ const loginStyles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    logoViewImg: {
+        height: responsiveWidth(60),
+        width: responsiveWidth(60),
+
+    },
+
     bottomView: {
         flex: 2,
         width: responsiveWidth(100),
