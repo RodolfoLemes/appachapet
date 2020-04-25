@@ -2,20 +2,17 @@ import * as React from 'react';
 import { Text, View, Image, TouchableOpacity, Button} from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
-import Login from './Login';
+import AuthContext from '../contexts/auth'
 import deviceStyles from '../styles/deviceStyles';
 
 export default function Device({ navigation, route }) {
+	const { forceLogout } = React.useContext(AuthContext)
 
-	// Esse hook é responsavel por criar o botão do Logout
-	React.useLayoutEffect(() => {
-		navigation.setOptions({
-		  headerLeft: () => (
-			<Button onPress={() => navigation.navigate('Login')} title="Logout" />
-		  ),
-		});
-	}, [navigation]);
-	
+	function logout() {
+		forceLogout()
+	}
+
+	// Esse hook é responsavel por criar o botão do Logout	
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ deviceStyles.container }>
 			<View>
@@ -41,7 +38,7 @@ export default function Device({ navigation, route }) {
 				</View>
 			</TouchableOpacity>
 			<View>
-				<TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
+				<TouchableOpacity onPress={logout}>
 					<Text>Voltar para Login</Text>
 				</TouchableOpacity>
 			</View>

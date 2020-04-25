@@ -1,10 +1,12 @@
+import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Button } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createSwitchNavigator, createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';	
+
+import AuthContext, { AuthProvider } from './src/contexts/auth';
 
 import Login from './src/pages/Login'
 import Device from './src/pages/Device'
@@ -51,25 +53,43 @@ function TabNavigation() {
 	)
 }
 
-const Stack = createStackNavigator()
+const StackHome = createStackNavigator()
+const StackLogin = createStackNavigator()
 
-function StackNavigation() {
-	return (
-		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen options={{ headerShown: false }} name='Login' component={Login} />
-				<Stack.Screen 
-					name='Device' 
-					component={Device} 
-				/>
-				<Stack.Screen name='TabNavigation' component={TabNavigation} />
-			</Stack.Navigator>
-		</NavigationContainer>
-	)
+const HomeRoutes = () => (
+	<StackHome.Navigator>
+		<StackHome.Screen options={{ headerShown: false }} name='Device' component={ Device }/>
+		<StackHome.Screen name='TabNavigator' component={ TabNavigation }/>
+	</StackHome.Navigator>
+)
+
+const LoginRoutes = () => (
+	<StackLogin.Navigator>
+		<StackLogin.Screen options={{ headerShown: false }} name='Login' component={ Login } />
+	</StackLogin.Navigator>
+)
+
+export const Router = () => {
+	const { signed, loading } = React.useContext(AuthContext)
+
+	if(loading) {
+		return (
+			<View style={{ flex: 1, justifyContent: 'center', alignItem: 'center' }}>
+				<ActivityIndicator size='large' />
+			</View>
+		)
+	}
+
+	return signed ? <HomeRoutes /> : <LoginRoutes />
 }
 
 export default function App() {
 	return (
-		<StackNavigation />
-	);
+		<NavigationContainer>
+			<AuthProvider>
+				<Router />
+			</AuthProvider>
+		</NavigationContainer>
+	)
+	
 }

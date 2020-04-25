@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import * as Google from 'expo-google-app-auth';
 
+import AuthContext from '../contexts/auth'
 import loginStyles from '../styles/loginStyles'
 
 async function signInWithGoogleAsync() {
@@ -23,8 +24,13 @@ async function signInWithGoogleAsync() {
 	//navigation.navigate('StackNavigation') // Isso esta errado, não pode estar aqui
 }
 
-export default function Login({ navigation, route }) {
-	console.log(route.name)
+export default function Login() {
+	const { forceLogin, signed } = React.useContext(AuthContext)
+
+	function login() {
+		forceLogin()
+	}
+
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
 			<View style={ loginStyles.logoView }>
@@ -34,7 +40,7 @@ export default function Login({ navigation, route }) {
 				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => signInWithGoogleAsync()}>
 					<Text style={ loginStyles.googleTxt }>Entrar com Google</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => navigation.navigate('Device')}>
+				<TouchableOpacity style={ loginStyles.googleBtn } onPress={login}>
 					<Text style={ loginStyles.googleTxt }>Pular Login</Text>
 				</TouchableOpacity>
 			</View>
