@@ -9,11 +9,41 @@ const deviceStyles = StyleSheet.create({
         backgroundColor: '#FFF',
     },
 
+    titleView: {
+        flexDirection: 'row',
+        height: 50,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+
+    titleTextView: {
+        height: 50,
+        flex: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    titleIconView: {
+        height: 50,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    titleText: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: '#2147D6',
+    },
+
     itemTcb: {
         flexDirection: 'row',
         height: 75,
         width: '80%',
         borderRadius: 25,
+        marginVertical: 10,
     },
 
     itemImgView: {
@@ -31,12 +61,6 @@ const deviceStyles = StyleSheet.create({
         borderRadius: 25,
     },
 
-    /* itemInfoView: {
-        height: '100%',
-        flex: 6,
-        borderTopRightRadius: 25,
-        borderBottomRightRadius: 25,
-    }, */
     itemInfoView: {
         height: '100%',
         flex: 6,
