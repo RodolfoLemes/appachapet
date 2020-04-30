@@ -59,7 +59,7 @@ const StackLogin = createStackNavigator()
 const HomeRoutes = () => (
 	<StackHome.Navigator>
 		<StackHome.Screen options={{ headerShown: false }} name='Device' component={ Device }/>
-		<StackHome.Screen name='TabNavigator' component={ TabNavigation }/>
+		<StackHome.Screen name='TabNavigation' component={ TabNavigation }/>
 	</StackHome.Navigator>
 )
 
