@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, StatusBar, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -45,6 +45,7 @@ function TabNavigation() {
 					inactiveTintColor: 'gray',
 					style: {height: 70, elevation:0, borderTopWidth: 0, shadowOpacity:0, marginBottom: 5},
 				}}
+				
 				>
 				<Tab.Screen name="Atividade" component={Activity} />
 				<Tab.Screen name="GPS" component={Gps} />
@@ -59,7 +60,26 @@ const StackLogin = createStackNavigator()
 const HomeRoutes = () => (
 	<StackHome.Navigator>
 		<StackHome.Screen options={{ headerShown: false }} name='Device' component={ Device }/>
-		<StackHome.Screen name='TabNavigation' component={ TabNavigation }/>
+		<StackHome.Screen 
+			name='TabNavigation' 
+			component={ TabNavigation }
+			options={({ navigation }) => ({
+				headerStyle: {
+					backgroundColor: '#fff',
+					elevation: 0
+				},
+				headerTintColor: '#fff',
+				headerTitleStyle: {
+					fontWeight: 'bold',
+				},
+				headerTitle: '',
+				headerLeft: () => (
+					<TouchableOpacity onPress={() => navigation.navigate('Device')} style={{paddingLeft: 10}}>
+						<MaterialCommunityIcons name={'reply'} size={50} color={'#2147D6'} />
+					</TouchableOpacity>
+				)
+			})}
+		/>
 	</StackHome.Navigator>
 )
 
@@ -82,6 +102,10 @@ export const Router = () => {
 
 	return signed ? <HomeRoutes /> : <LoginRoutes />
 }
+
+StatusBar.setBackgroundColor('#ffffff')
+StatusBar.setBarStyle("dark-content")
+StatusBar.setHidden(false)
 
 export default function App() {
 	return (

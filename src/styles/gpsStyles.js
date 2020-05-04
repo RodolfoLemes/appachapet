@@ -18,7 +18,7 @@ const gpsStyles = StyleSheet.create({
         height: 100,
         width: '85%',
         flexDirection: 'row',
-        marginTop: 50,
+        marginTop: 25,
         marginLeft: '5%',
     },
 
