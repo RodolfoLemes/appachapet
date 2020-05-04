@@ -35,18 +35,15 @@ export default function Login() {
 
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
-			<View style={ loginStyles.logoView }>
+			<TouchableOpacity style={ loginStyles.logoView } onPress={login}>
 				<Image
 					style={ loginStyles.logoViewImg }
 					source={require('../../assets/logo.png')}
 				/>
-			</View>
+			</TouchableOpacity>
 			<View style={ loginStyles.bottomView }>
 				<TouchableOpacity style={ loginStyles.googleBtn } onPress={() => signInWithGoogleAsync()}>
 					<Text style={ loginStyles.googleTxt }>Entrar com Google</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={ loginStyles.googleBtn } onPress={login}>
-					<Text style={ loginStyles.googleTxt }>Pular Login</Text>
 				</TouchableOpacity>
 			</View>
 		</SafeAreaView>
