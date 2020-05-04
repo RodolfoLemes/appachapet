@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 
+import api from '../services/api'
 const AuthContext = createContext({ signed: false, user: {} });
 
 function Sign() {
@@ -21,6 +22,7 @@ function Sign() {
 export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null)
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -57,15 +59,20 @@ export const AuthProvider = ({ children }) => {
 
     function forceLogout() {
         setUser(null)
+        setToken(null)
     }
 
     async function forceLogin() {
-        let json = await Sign()
-        setUser(json.user)
+        const email = 'Benzito'
+		const name = 'Benzito'
+
+		const response = await api.post('autenticate', { email, name })
+        setUser(response.data.user)
+        setToken(response.data.token)
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut, loading, forceLogin, forceLogout }} >
+        <AuthContext.Provider value={{ signed: !!user, user, token, signIn, signOut, loading, forceLogin, forceLogout }} >
             {children}
         </AuthContext.Provider>
     )
