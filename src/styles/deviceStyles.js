@@ -98,6 +98,50 @@ const deviceStyles = StyleSheet.create({
         color: '#fff',
     },
 
+    floatingTcb: {
+        height: 70,
+        width: 70,
+        borderRadius: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+        backgroundColor: '#2147D6',
+    },
+
+    modalView: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+    },
+
+    infoTxt: {
+        height: 62,
+        width: '80%',
+        justifyContent: 'center',
+        paddingLeft: 20,
+        borderWidth: 2,
+        borderRadius: 10,
+        borderColor: '#BDBDBD',
+        marginVertical: 15,
+    },
+
+    registerTcb: {
+        height: 50,
+        width: '80%',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 5,
+        backgroundColor: '#2147D6',
+    },
+
+    registerTxt: {
+        fontSize: 18,
+        color: '#fff'
+    }
+    
 })
 
 export default deviceStyles;

@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { Text, View, Image, TouchableOpacity, ScrollView,  } from 'react-native';
+import { Modal, Text, View, Image, TouchableOpacity, ScrollView, Alert, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import api from '../services/api'
 import AuthContext from '../contexts/auth'
 import deviceStyles from '../styles/deviceStyles';
 
 export default function Device({ navigation }) {
-	const { forceLogout, user } = React.useContext(AuthContext)
+	const { forceLogout, user, token } = React.useContext(AuthContext)
+	const [modalVisible, setModalVisible] = React.useState(false);
+	const [imei, setImei] = React.useState('')
+	const [name, setName] = React.useState('')
+	const [devices, setDevices] = React.useState(user.devices)
 
 	function logout() {
 		forceLogout()
@@ -22,7 +27,33 @@ export default function Device({ navigation }) {
 		})
 	}
 
-	// Esse hook é responsavel por criar o botão do Logout	
+	async function createDevice() {
+		if(name.length < 1 || imei.length < 1) {
+			Alert.alert("Faça as coisas certas, por favor. Insira um nome e um imei decente")
+		} else {
+			const response = await api.post('device', {
+				imei,
+				name,
+			}, {
+				headers: { 
+					Authorization: 'Bearer ' + token 
+				}
+			})
+	
+			const { sucess, devices } = response.data
+			
+			if(sucess) {
+				setDevices(devices)
+				setModalVisible(false)
+			} else {
+				const { error } = response.data
+				Alert.alert(error)
+			}
+		}
+	}
+	
+
+
 	return (
 		<SafeAreaView forceInset={{ top: 'always' }} style={ deviceStyles.container }>
 			<View style={ deviceStyles.titleView }>
@@ -41,8 +72,8 @@ export default function Device({ navigation }) {
 			</View>
 			<ScrollView style={{ height: '100%', width: '100%' }}>
 				<View style={ deviceStyles.container }>
-					{ user.devices.map(element => (
-						<TouchableOpacity 
+					{ devices.map(element => (
+						<TouchableOpacity
 							key={element._id}
 							style={ deviceStyles.itemTcb }
 							onPress={() => goToGPS(element)}
@@ -65,6 +96,46 @@ export default function Device({ navigation }) {
 					)) }
 				</View>
 			</ScrollView>
+			<TouchableOpacity onPress={ () => setModalVisible(true) } style={ deviceStyles.floatingTcb }>
+				<MaterialCommunityIcons name={'plus'} size={50} color={'#fff'}/>		
+			</TouchableOpacity>
+
+			<Modal
+				animationType='slide'
+				transparent={false}
+				visible={modalVisible}
+				onRequestClose={() => {
+					setModalVisible(false)
+				}}>
+				<View style={ deviceStyles.modalView }>
+					<View style={{ flex: 1, marginTop: 20 }}>
+						<Text style={ deviceStyles.titleText }>Novo dispositivo</Text>
+					</View>
+					<View style={{ flex: 4, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+						<TextInput
+							style={ deviceStyles.infoTxt }
+							autoCapitalize='none'
+							onChangeText={user => setName(user)}
+							value={name}
+							placeholder='Nome do pet'
+							placeholderTextColor='#777'
+						/>
+						<TextInput
+							style={ deviceStyles.infoTxt }
+							onChangeText={id => setImei(id)}
+							value={imei}
+							placeholder='IMEI da coleira'
+							placeholderTextColor='#777'
+						/>
+						
+						<TouchableOpacity onPress={createDevice} style={ deviceStyles.registerTcb }>
+							<Text style={ deviceStyles.registerTxt }>Registrar</Text>
+						</TouchableOpacity>
+					</View>
+					<View style={{ flex: 1 }}>
+					</View>
+				</View>
+			</Modal>
 		</SafeAreaView>
 	);
 }
