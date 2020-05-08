@@ -21,20 +21,12 @@ import gpsStyles from '../styles/gpsStyles';
     "device": "5e8ddf1d8a139f0021a44e0b",
     "isWifi": true,
 }, */
-
-/* function linesMarkers(markers) {
-	let reverseMarkers = markers.reverse()
-	let arr = []
-
-	reverseMarkers.map(element => {
-		arr.push({
-			latitude: element.coords.lat,
-			longitude: element.coords.lon
-		})
-	})
-
-	return arr
-} */
+/*  
+=> Tres botoes emcima no mapa, ao clicar suba um pouco e aparece um slider horizontal
+	=> cada botao se relaciona com o proprio slider
+		=> Ex: botão de geofencing da um clique no mapa
+		=> Alerta sem slider
+*/
 
 export default function Gps({ route }) {
 	const { user, token } = React.useContext(AuthContext)
@@ -101,23 +93,34 @@ export default function Gps({ route }) {
 							longitudeDelta: 0.0091
 						}}
 					>
+					<MapView.Circle
+						center = {{ latitude: markers[0].coords.lat, longitude: markers[0].coords.lon}}
+						radius = { 30 }
+						strokeWidth = { 1 }
+						strokeColor = { '#1a66ff' }
+						fillColor = { 'rgba(230,238,255,0.5)' }
+        			/>
+
 					{ markers.map((element, index) => {
-						const data = new Date(element.coords.timestamp)
-						return (
-							<Marker
-								key={ element._id }
-								title={ `${element.isWifi ? 'Wi-fi' : 'GPRS'} - Estive aqui as ${data.getHours()}:${data.getMinutes()} - Dia: ${data.getDate()}/${data.getMonth()}` }
-								style={ gpsStyles.topInfoImg }
-								coordinate={{ latitude: element.coords.lat, longitude: element.coords.lon }} 
-								anchor={{ x: 0, y: 0 }}
-							>
-								<Image 
-									source={{ uri:'https://post.healthline.com/wp-content/uploads/sites/3/2020/02/322868_1100-1100x628.jpg' }} 
-									style={index == 0 ? { borderRadius: 25, height: 50, width:50 } : { borderRadius: 5, height: 10, width: 10 }} 
-								/>
-							</Marker>
-						)
-						})
+						if( index == 0) {
+							const data = new Date(element.coords.timestamp)
+							return (
+								<Marker
+									key={ element._id }
+									title={ `${element.isWifi ? 'Wi-fi' : 'GPRS'} - Estive aqui as ${data.getHours()}:${data.getMinutes()} - Dia: ${data.getDate()}/${data.getMonth()}` }
+									style={ gpsStyles.topInfoImg }
+									coordinate={{ latitude: element.coords.lat, longitude: element.coords.lon }} 
+									anchor={{ x: 0, y: 0 }}
+								>
+									<Image 
+										source={{ uri:'https://post.healthline.com/wp-content/uploads/sites/3/2020/02/322868_1100-1100x628.jpg' }} 
+										style={{ borderRadius: 15, height: 30, width: 30 }} 
+									/>
+								</Marker>
+							)
+						} else {
+							return (null)
+						}})
 					}
 					{/* <Polyline 
 						coordinates={linesMarkers(markers)}

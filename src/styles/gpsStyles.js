@@ -56,12 +56,13 @@ const gpsStyles = StyleSheet.create({
 	
 	middleInfo: {
         height: responsiveHeight(50),
-        width: responsiveWidth(90),
+        width: '100%',
 		marginTop: responsiveHeight(5),
     },
 	
 	mapStyle: {
-		flex:1,
+        flex:1,
+        width: '100%',
 	},
 })
 

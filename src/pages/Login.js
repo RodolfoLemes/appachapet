@@ -8,7 +8,6 @@ import api from '../services/api'
 import AuthContext from '../contexts/auth'
 import loginStyles from '../styles/loginStyles'
 
-
 async function signInWithGoogleAsync() {
 	try {
 	  const { type, accessToken, name, email } = await Google.logInAsync({

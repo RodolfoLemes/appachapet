@@ -127,6 +127,17 @@ const deviceStyles = StyleSheet.create({
         marginVertical: 15,
     },
 
+    infoTxtFocused: {
+        height: 62,
+        width: '80%',
+        justifyContent: 'center',
+        paddingLeft: 20,
+        borderWidth: 2,
+        borderRadius: 10,
+        borderColor: '#2147D6',
+        marginVertical: 15,
+    },
+
     registerTcb: {
         height: 50,
         width: '80%',
