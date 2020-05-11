@@ -1,20 +1,49 @@
-import * as React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, Image, KeyboardAvoidingView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
+import api from '../services/api'
+import AuthContext from '../contexts/auth'
 import dataStyles from '../styles/dataStyles';
 
 export default function Data() {
-	const [petName, setPetName] = React.useState('')
-	const [humanName, setHumanName] = React.useState('')
-	const [emergPhone, setEmergPhone] = React.useState('')
-	const [phone, setPhone] = React.useState('')
-	const [cep, setCep] = React.useState('')
-	const [onFocusPetName, setOnFocusPetName] = React.useState(false)
-	const [onFocusHumanName, setOnFocusHumanName] = React.useState(false)
-	const [onFocusEmergPhone, setOnFocusEmergPhone] = React.useState(false)
-	const [onFocusPhone, setOnFocusPhone] = React.useState(false)
-	const [onFocusCep, setOnFocusCep] = React.useState(false)
+	const { user, token } = useContext(AuthContext)
+
+	const [petName, setPetName] = useState('')
+	const [humanName, setHumanName] = useState('')
+	const [emergPhone, setEmergPhone] = useState('')
+	const [phone, setPhone] = useState('')
+	const [cep, setCep] = useState('')
+	const [onFocusPetName, setOnFocusPetName] = useState(false)
+	const [onFocusHumanName, setOnFocusHumanName] = useState(false)
+	const [onFocusEmergPhone, setOnFocusEmergPhone] = useState(false)
+	const [onFocusPhone, setOnFocusPhone] = useState(false)
+	const [onFocusCep, setOnFocusCep] = useState(false)
+
+	const { device } = route.params
+	const AuthString = 'Bearer ' + token
+
+	// Acionado através de um botão para realizar essas atualizações de dados
+	// PRECISA SER ADICIONADO
+	async function sendData() {
+		const response = await api.patch(`device/${device._id}`, {
+			petName,
+			emergencialPhone: emergPhone,
+			cep,
+			phone
+		}, {
+			header: { 
+				Authorization: AuthString 
+			}
+		})
+
+		const { user: newUser, device: newDevice } = response.data
+		setPetName(newDevice.name)
+		setHumanName(newUser.name)
+		setEmergPhone(newDevice.emergencialPhone)
+		setPhone(newUser.phone)
+		setCep(newDevice.cep)
+	}
 
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ dataStyles.container }>

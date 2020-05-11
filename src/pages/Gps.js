@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-navigation';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import io from 'socket.io-client'
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 import api from '../services/api'
@@ -40,9 +41,16 @@ function sendingTimeToApi() {
 
 let deviceWidth = Dimensions.get('window').width
 
-export default function Gps({ route }) {
+function moveDataToFirstInMarkers(data, markers) {
+	if(markers == null) return markers
+	let arr =[data]
+	markers.map(element => arr.push(element))
 
-	const { user, token } = React.useContext(AuthContext)
+	return arr
+}
+
+export default function Gps({ route }) {
+	const { user, token } = useContext(AuthContext)
 
 	const [markers, setMarkers] = useState(null)
 	// Variavel para determinar a quanto tempo o usuario quer pegar localizações
@@ -79,8 +87,25 @@ export default function Gps({ route }) {
 	}, [])
 
 	const left = value * (deviceWidth-30)/maxValue - 10;
+		
+	// Socket.IO
+	useEffect(() => {
+		const socket = io('http://achapet.herokuapp.com', {
+			query: { 
+				user: user._id 
+			},
+			extraHeaders: {
+				Authorization: AuthString
+			}
+		})
+		socket.on('data', data => {
+			console.log('FOI BUSCRANA')
+			let arr = moveDataToFirstInMarkers(data, markers)
+			setMarkers(arr)
+		})
+	}, [])
 
-	return (		
+	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
     		<View style={ gpsStyles.topInfo }>
         		<View style={ gpsStyles.topInfoTexts }>
@@ -148,7 +173,7 @@ export default function Gps({ route }) {
         			/>
 
 					{ markers.map((element, index) => {
-						if( index == 0) {
+						if(index == 0) {
 							const data = new Date(element.coords.timestamp)
 							return (
 								<Marker
