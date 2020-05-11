@@ -1,8 +1,9 @@
-import  React, { useState, useEffect } from 'react';
+import  React, { useState, useEffect, useContext } from 'react';
 import { Text, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
+import io from 'socket.io-client'
 
 import api from '../services/api'
 import AuthContext from '../contexts/auth'
@@ -28,15 +29,22 @@ import gpsStyles from '../styles/gpsStyles';
 		=> Alerta sem slider
 */
 
+function moveDataToFirstInMarkers(data, markers) {
+	if(markers == null) return markers
+	let arr =[data]
+	markers.map(element => arr.push(element))
+
+	return arr
+}
+
 export default function Gps({ route }) {
-	const { user, token } = React.useContext(AuthContext)
+	const { user, token } = useContext(AuthContext)
 
 	const [markers, setMarkers] = useState(null)
 	// Variavel para determinar a quanto tempo o usuario quer pegar localizações
 	// Criar algum tipo de input para setar esse tempo:
 	// Se time = 0, pega todas as localizações, se time = 1 pega todas as localizações de 1 hora atras e assim vai
-	const [time, setTime] = useState(0) 
-
+	const [time, setTime] = useState(0)
 	// Esse dado dever vir quando ele selecionar o device, vir da navegação
 	const { device } = route.params
 	const AuthString = 'Bearer '.concat(token)
@@ -61,6 +69,23 @@ export default function Gps({ route }) {
 			}
 		}
 		fetchData(device, time)
+	}, [])
+
+	// Socket.IO
+	useEffect(() => {
+		const socket = io('http://achapet.herokuapp.com', {
+			query: { 
+				user: user._id 
+			},
+			extraHeaders: {
+				Authorization: AuthString
+			}
+		})
+		socket.on('data', data => {
+			console.log('FOI BUSCRANA')
+			let arr = moveDataToFirstInMarkers(data, markers)
+			setMarkers(arr)
+		})
 	}, [])
 
 	return (
@@ -102,7 +127,7 @@ export default function Gps({ route }) {
         			/>
 
 					{ markers.map((element, index) => {
-						if( index == 0) {
+						if(index == 0) {
 							const data = new Date(element.coords.timestamp)
 							return (
 								<Marker

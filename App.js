@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { View, ActivityIndicator, StatusBar, TouchableOpacity } from 'react-native';
+import { View, ActivityIndicator, StatusBar, TouchableOpacity, YellowBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -13,6 +13,10 @@ import Device from './src/pages/Device'
 import Activity from './src/pages/Activity'
 import Gps from './src/pages/Gps'
 import Data from './src/pages/Data'
+
+YellowBox.ignoreWarnings([
+	'Unrecognized WebSocket'
+])
 
 const Tab = createBottomTabNavigator();
 
