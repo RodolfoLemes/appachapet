@@ -18,7 +18,6 @@ const gpsStyles = StyleSheet.create({
         height: 100,
         width: '85%',
         flexDirection: 'row',
-        marginTop: 25,
         marginLeft: '5%',
     },
 
@@ -52,12 +51,37 @@ const gpsStyles = StyleSheet.create({
 
     topInfoTextsSubtitleFont: {
         fontSize: 16,
-	},
-	
-	middleInfo: {
-        height: responsiveHeight(50),
+    },
+
+    middleInfo: {
+        flex: 1,
         width: '100%',
-		marginTop: responsiveHeight(5),
+        marginBottom: 5,
+    },
+
+    buttonsView: {
+        flexDirection: 'row',
+        height: '70%',
+        width: '100%',
+        marginHorizontal: 10,
+    },
+
+    buttonView: {
+        flex: 1,
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    sliderView: {
+        height: '30%',
+        width: '100%',
+    },
+	
+	mapView: {
+        flex: 3,
+        width: '100%',
+		marginBottom: 20,
     },
 	
 	mapStyle: {

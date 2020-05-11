@@ -1,12 +1,14 @@
 import  React, { useState, useEffect } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Slider, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 import api from '../services/api'
 import AuthContext from '../contexts/auth'
-import gpsStyles from '../styles/gpsStyles';	
+import gpsStyles from '../styles/gpsStyles';
 
 // Exemplo de um elemento do array vindo da API
 /* Object {
@@ -27,8 +29,19 @@ import gpsStyles from '../styles/gpsStyles';
 		=> Ex: botão de geofencing da um clique no mapa
 		=> Alerta sem slider
 */
+var mySetTime
+function sendingTimeToApi() {
+	clearTimeout(mySetTime)
+
+	mySetTime = setTimeout(() => {
+		console.log('cu')
+	}, 5000);
+}
+
+let deviceWidth = Dimensions.get('window').width
 
 export default function Gps({ route }) {
+
 	const { user, token } = React.useContext(AuthContext)
 
 	const [markers, setMarkers] = useState(null)
@@ -36,6 +49,8 @@ export default function Gps({ route }) {
 	// Criar algum tipo de input para setar esse tempo:
 	// Se time = 0, pega todas as localizações, se time = 1 pega todas as localizações de 1 hora atras e assim vai
 	const [time, setTime] = useState(0) 
+	const [maxValue, setMaxValue] = useState(100)
+	const [value, setValue] = useState(0)
 
 	// Esse dado dever vir quando ele selecionar o device, vir da navegação
 	const { device } = route.params
@@ -63,7 +78,9 @@ export default function Gps({ route }) {
 		fetchData(device, time)
 	}, [])
 
-	return (
+	const left = value * (deviceWidth-30)/maxValue - 10;
+
+	return (		
 		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
     		<View style={ gpsStyles.topInfo }>
         		<View style={ gpsStyles.topInfoTexts }>
@@ -81,7 +98,36 @@ export default function Gps({ route }) {
           			/>
         		</View>
     	  	</View>
-	  		<View style= { gpsStyles.middleInfo }>
+			<View style={ gpsStyles.middleInfo }>
+				<View style={ gpsStyles.buttonsView }>
+					<TouchableOpacity style={ gpsStyles.buttonView }>
+						<MaterialCommunityIcons name={'calendar'} size={32} color={ '#2344CE' } />
+						<Text>Histórico</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={ gpsStyles.buttonView }>
+						<MaterialCommunityIcons name={'home'} size={32} color={ '#2344CE' } />
+						<Text>Casa</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={ gpsStyles.buttonView }>
+						<MaterialCommunityIcons name={'dog-side'} size={32} color={ '#2344CE' } />
+						<Text>Amigos</Text>
+					</TouchableOpacity>
+				</View>
+				<View style={ gpsStyles.sliderView }>
+					<Text style={ { width: 50, textAlign: 'center', left: left } }>
+						{ Math.floor(value) }
+					</Text>
+					<Slider
+						thumbTintColor={ '#2344CE' }
+						minimumTrackTintColor={ '#2344CE' }
+						maximumValue={ maxValue } 
+						value={ value }
+						onValueChange={value => setValue(value)}
+						onSlidingComplete={sendingTimeToApi}
+					/>
+				</View>
+			</View>	
+	  		<View style= { gpsStyles.mapView }>
 				{ markers === null 
 				? (null)
 				: (	<MapView
