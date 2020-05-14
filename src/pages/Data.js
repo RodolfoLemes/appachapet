@@ -6,7 +6,7 @@ import api from '../services/api'
 import AuthContext from '../contexts/auth'
 import dataStyles from '../styles/dataStyles';
 
-export default function Data() {
+export default function Data({ route }) {
 	const { user, token } = useContext(AuthContext)
 
 	const [petName, setPetName] = useState('')
