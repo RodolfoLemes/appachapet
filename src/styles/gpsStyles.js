@@ -73,9 +73,16 @@ const gpsStyles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    sliderView: {
+    middleView: {
         height: '30%',
         width: '100%',
+    },
+
+    sliderView: {
+        height: '60%',
+        width: '80%',
+        marginLeft: '10%',
+        justifyContent: 'center'
     },
 	
 	mapView: {

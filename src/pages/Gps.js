@@ -1,11 +1,10 @@
-import  React, { useState, useEffect } from 'react';
-import { Text, View, Image, Slider, TouchableOpacity, Dimensions } from 'react-native';
+import  React, { useState, useEffect, useContext } from 'react';
+import { Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import io from 'socket.io-client'
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import io from 'socket.io-client';
+import Slider from 'react-native-slider'
 
 import api from '../services/api'
 import AuthContext from '../contexts/auth'
@@ -56,9 +55,16 @@ export default function Gps({ route }) {
 	// Variavel para determinar a quanto tempo o usuario quer pegar localizações
 	// Criar algum tipo de input para setar esse tempo:
 	// Se time = 0, pega todas as localizações, se time = 1 pega todas as localizações de 1 hora atras e assim vai
-	const [time, setTime] = useState(0) 
+	
+	const [time, setTime] = useState(0)
+	const [radius, setRadius] = useState(30)
+	const [radiusFriends, setRadiusFriends] = useState(300)
+	
 	const [maxValue, setMaxValue] = useState(100)
 	const [value, setValue] = useState(0)
+	
+	const [slider, setSlider] = useState('history') // history, home ou friends
+	const [unit, setUnit] = useState('h') // history, home ou friends
 
 	// Esse dado dever vir quando ele selecionar o device, vir da navegação
 	const { device } = route.params
@@ -86,7 +92,7 @@ export default function Gps({ route }) {
 		fetchData(device, time)
 	}, [])
 
-	const left = value * (deviceWidth-30)/maxValue - 10;
+	const left = value * (deviceWidth-100)/maxValue + deviceWidth*0.1;
 		
 	// Socket.IO
 	useEffect(() => {
@@ -105,6 +111,46 @@ export default function Gps({ route }) {
 		})
 	}, [])
 
+	useEffect(() => {
+
+		if (slider == 'history'){
+			setTime(value)
+		}
+		else if (slider == 'home'){
+			setRadius(value)
+		}
+		else if (slider == 'friends'){
+			setRadiusFriends(value)
+		}
+		
+	}, [value])
+
+	useEffect(() => {
+
+		if (slider == 'history'){
+			setMaxValue(24)
+			setUnit('h')
+		}
+		else if (slider == 'home'){
+			setMaxValue(300)
+			setUnit('m')
+		}
+		else if (slider == 'friends'){
+			setMaxValue(800)
+			setUnit('m')
+		}
+		
+	}, [slider])
+
+	/* const renderTextThumb = () => {
+		console.log('sdasdasdsadas')
+		return (
+			<View style={{ height: 30, width: 30 }}>
+				<Text>aaa</Text>
+			</View>
+		)
+	} */
+	
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
     		<View style={ gpsStyles.topInfo }>
@@ -125,31 +171,35 @@ export default function Gps({ route }) {
     	  	</View>
 			<View style={ gpsStyles.middleInfo }>
 				<View style={ gpsStyles.buttonsView }>
-					<TouchableOpacity style={ gpsStyles.buttonView }>
-						<MaterialCommunityIcons name={'calendar'} size={32} color={ '#2344CE' } />
-						<Text>Histórico</Text>
+					<TouchableOpacity style={ gpsStyles.buttonView } onPress={() => setSlider('history')} activeOpacity={1}>
+						<MaterialCommunityIcons name={'calendar'} size={ slider == 'history' ? 32 : 28 } color={ slider == 'history' ? '#2344CE' : 'gray' } />
+						<Text style={ slider == 'history' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Histórico</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={ gpsStyles.buttonView }>
-						<MaterialCommunityIcons name={'home'} size={32} color={ '#2344CE' } />
-						<Text>Casa</Text>
+					<TouchableOpacity style={ gpsStyles.buttonView } onPress={() => setSlider('home')} activeOpacity={1}>
+						<MaterialCommunityIcons name={'home'} size={ slider == 'home' ? 32 : 28 } color={ slider == 'home' ? '#2344CE' : 'gray' } />
+						<Text style={ slider == 'home' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Casa</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={ gpsStyles.buttonView }>
-						<MaterialCommunityIcons name={'dog-side'} size={32} color={ '#2344CE' } />
-						<Text>Amigos</Text>
+					<TouchableOpacity style={ gpsStyles.buttonView } onPress={() => setSlider('friends')} activeOpacity={1}>
+						<MaterialCommunityIcons name={'dog-side'} size={ slider == 'frineds' ? 32 : 28 } color={ slider == 'friends' ? '#2344CE' : 'gray' } />
+						<Text style={ slider == 'friends' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Amigos</Text>
 					</TouchableOpacity>
 				</View>
-				<View style={ gpsStyles.sliderView }>
-					<Text style={ { width: 50, textAlign: 'center', left: left } }>
-						{ Math.floor(value) }
-					</Text>
-					<Slider
-						thumbTintColor={ '#2344CE' }
-						minimumTrackTintColor={ '#2344CE' }
-						maximumValue={ maxValue } 
-						value={ value }
-						onValueChange={value => setValue(value)}
-						onSlidingComplete={sendingTimeToApi}
-					/>
+				<View style={ gpsStyles.middleView }>
+					<View style={{ height: '40%', justifyContent: 'center' }}>
+						<Text style={ { width: 50, left: left } }>
+							{ Math.floor(value) } { unit }
+						</Text>
+					</View>
+					<View style={ gpsStyles.sliderView }>
+						<Slider
+							thumbTintColor={ '#2344CE' }
+							minimumTrackTintColor={ '#2344CE' }
+							maximumValue={ maxValue } 
+							value={ value }
+							onValueChange={value => setValue(value)}
+							onSlidingComplete={sendingTimeToApi}
+						/>						
+					</View>
 				</View>
 			</View>	
 	  		<View style= { gpsStyles.mapView }>
@@ -163,10 +213,11 @@ export default function Gps({ route }) {
 							latitudeDelta: 0.0022,
 							longitudeDelta: 0.0091
 						}}
+						onLongPress={ (e) => console.log(e) }
 					>
 					<MapView.Circle
-						center = {{ latitude: markers[0].coords.lat, longitude: markers[0].coords.lon}}
-						radius = { 30 }
+						center = {{ latitude: markers[0].coords.lat, longitude: markers[0].coords.lon }}
+						radius = { radius }
 						strokeWidth = { 1 }
 						strokeColor = { '#1a66ff' }
 						fillColor = { 'rgba(230,238,255,0.5)' }
