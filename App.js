@@ -48,6 +48,7 @@ function TabNavigation() {
 					activeTintColor: '#2147D6',
 					inactiveTintColor: 'gray',
 					style: {height: 70, elevation:0, borderTopWidth: 0, shadowOpacity:0, marginBottom: 5},
+					keyboardHidesTabBar: true,
 				}}
 				
 				>

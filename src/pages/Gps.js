@@ -1,7 +1,7 @@
-import  React, { useState, useEffect, useContext } from 'react';
-import { Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import  React, { useState, useEffect, useContext, useRef } from 'react';
+import { Text, View, Image, TouchableOpacity, Dimensions, Animated, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import io from 'socket.io-client';
 import { Slider } from "@miblanchard/react-native-slider";
@@ -40,10 +40,23 @@ function moveDataToFirstInMarkers(data, markers) {
 	return arr
 }
 
-export default function Gps({ route }) {
-	const { user, token } = useContext(AuthContext)
+function linesMarkers(markers) {
+	let reverseMarkers = markers.reverse()
+	let arr = []
+	reverseMarkers.map(element => {
+		arr.push({
+			latitude: element.coords.lat,
+			longitude: element.coords.lon
+		})
+	})
+	return arr
+}
+
+export default function Gps() {
+	const { user, token, device } = useContext(AuthContext)
 
 	// States
+
 	const [markers, setMarkers] = useState(null)
 	// Variavel para determinar a quanto tempo o usuario quer pegar localizações
 	// Criar algum tipo de input para setar esse tempo:
@@ -57,12 +70,78 @@ export default function Gps({ route }) {
 	
 	const [slider, setSlider] = useState('history') // history, home ou friends
 	const [unit, setUnit] = useState('h') // history, home ou friends
+	
+	const [homeLat, setHomeLat] = useState(null)
+	const [homeLon, setHomeLon] = useState(null)
 
 	// Variables
-	const { device } = route.params
+
 	const AuthString = 'Bearer '.concat(token)
 	const left = value * (deviceWidth-100)/maxValue + deviceWidth*0.1;
 	var mySetTime = null
+
+	// VARIÁVEIS DE ANIMAÇÃO //
+
+	// Componente de animação para TouchableOpacity, já que o animated não o suporta normalmente.
+	const AnimatedButton = Animated.createAnimatedComponent(TouchableOpacity)
+	// Variáveis para mudar a escala dos botões ao serem clicados.
+	const scaleHistory = useRef(new Animated.Value(1)).current
+	const scaleHome = useRef(new Animated.Value(1)).current
+	const scaleFriends = useRef(new Animated.Value(1)).current
+
+	// FIM DE VARIÁVEIS DE ANIMAÇÃO //
+
+	// FUNÇÕES DE ANIMAÇÃO //
+	function pressIn(param) {
+		if (param == 'history'){
+			Animated.timing(scaleHistory, {
+				toValue: 0.8,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+		}
+		else if (param == 'home'){
+			Animated.timing(scaleHome, {
+				toValue: 0.8,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+		}
+		else if (param == 'friends'){
+			Animated.timing(scaleFriends, {
+				toValue: 0.8,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+		}
+	}
+
+	function pressOut(param) {
+		if (param == 'history'){
+			Animated.timing(scaleHistory, {
+				toValue: 1,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+			}
+			else if (param == 'home'){
+			Animated.timing(scaleHome, {
+				toValue: 1,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+			}
+			else if (param == 'friends'){
+			Animated.timing(scaleFriends, {
+				toValue: 1,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+		}
+		setSlider(param)
+	}
+	
+	// FIM DE FUNÇÕES DE ANIMAÇÃO //
 
 	// Effects
 	useEffect(() => {
@@ -78,6 +157,10 @@ export default function Gps({ route }) {
 					}
 				})
 				let markersArr = response.data.datas
+				let { geofencing } = response.data
+				setHomeLat(geofencing.coordCentralLat) // substituir por coords da home, obtido no banco de dados
+				setHomeLon(geofencing.coordCentralLon)
+				setRadius(geofencing.radius)
 				setMarkers(markersArr)
 			} catch (error) {
 				console.log(error)
@@ -105,15 +188,15 @@ export default function Gps({ route }) {
 	}, [])
 
 	useEffect(() => {
-
+	
 		if (slider == 'history'){
-			setTime(value)
+			setTime(value[0])
 		}
 		else if (slider == 'home'){
-			setRadius(value)
+			setRadius(value[0])
 		}
 		else if (slider == 'friends'){
-			setRadiusFriends(value)
+			setRadiusFriends(value[0])
 		}
 		
 	}, [value])
@@ -151,6 +234,35 @@ export default function Gps({ route }) {
 		}, 5000);
 	}
 
+	
+	async function submitGeofencing(latitude, longitude) {
+		const response = await api.post(`device/${device._id}/geofencing`, {
+			latitude,
+			longitude,
+			radius
+		}, {
+			headers:{
+				Authorization: AuthString
+			}
+		})
+
+		if(response.data.sucess) {
+			setHomeLat(latitude)
+			setHomeLon(longitude)
+			console.log('foi')
+		} 
+	}
+
+	const geofencingManagement = (latitude, longitude) => {
+		Alert.alert(
+			"Geofencing",
+			"Deseja configuração a localização central da sua Geofencing?",
+			[
+				{ text: "Não", style: "cancel" },
+				{ text: "Sim", onPress: () => submitGeofencing(latitude, longitude)}
+			]
+		)
+	}
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
     		<View style={ gpsStyles.topInfo }>
@@ -171,18 +283,18 @@ export default function Gps({ route }) {
     	  	</View>
 			<View style={ gpsStyles.middleInfo }>
 				<View style={ gpsStyles.buttonsView }>
-					<TouchableOpacity style={ gpsStyles.buttonView } onPress={() => setSlider('history')} activeOpacity={1}>
-						<MaterialCommunityIcons name={'calendar'} size={ slider == 'history' ? 32 : 28 } color={ slider == 'history' ? '#2344CE' : 'gray' } />
+					<AnimatedButton style={ [gpsStyles.buttonView, {transform: [{scale: scaleHistory}]}] } onPressIn={() => {pressIn('history')}} onPressOut={() => {pressOut('history')}} activeOpacity={1}>
+						<MaterialCommunityIcons name={'calendar'} size={ 40 } color={ slider == 'history' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'history' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Histórico</Text>
-					</TouchableOpacity>
-					<TouchableOpacity style={ gpsStyles.buttonView } onPress={() => setSlider('home')} activeOpacity={1}>
-						<MaterialCommunityIcons name={'home'} size={ slider == 'home' ? 32 : 28 } color={ slider == 'home' ? '#2344CE' : 'gray' } />
+					</AnimatedButton>
+					<AnimatedButton style={ [gpsStyles.buttonView, {transform: [{scale: scaleHome}]}] } onPressIn={() => {pressIn('home')}} onPressOut={() => pressOut('home')} activeOpacity={1}>
+						<MaterialCommunityIcons name={'home'} size={ 40 } color={ slider == 'home' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'home' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Casa</Text>
-					</TouchableOpacity>
-					<TouchableOpacity style={ gpsStyles.buttonView } onPress={() => setSlider('friends')} activeOpacity={1}>
-						<MaterialCommunityIcons name={'dog-side'} size={ slider == 'frineds' ? 32 : 28 } color={ slider == 'friends' ? '#2344CE' : 'gray' } />
+					</AnimatedButton>
+					<AnimatedButton style={ [gpsStyles.buttonView, {transform: [{scale: scaleFriends}]}] } onPressIn={() => {pressIn('friends')}} onPressOut={() => pressOut('friends')} activeOpacity={1}>
+						<MaterialCommunityIcons name={'dog-side'} size={ 40 } color={ slider == 'friends' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'friends' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Amigos</Text>
-					</TouchableOpacity>
+					</AnimatedButton>
 				</View>
 				<View style={ gpsStyles.middleView }>
 					{/* <View style={{ height: '40%', justifyContent: 'center' }}>
@@ -209,20 +321,23 @@ export default function Gps({ route }) {
 				: (	<MapView
 						style={gpsStyles.mapStyle}
 						region={{
-							latitude: markers[0].coords.lat,
-							longitude: markers[0].coords.lon,
+							latitude: homeLat,
+							longitude: homeLon,
 							latitudeDelta: 0.0022,
 							longitudeDelta: 0.0091
 						}}
-						onLongPress={ (e) => console.log(e) }
+						onLongPress={ (event) => geofencingManagement(event.nativeEvent.coordinate.latitude, event.nativeEvent.coordinate.longitude ) }
 					>
 					<MapView.Circle
-						center = {{ latitude: markers[0].coords.lat, longitude: markers[0].coords.lon }}
+						center = {{ latitude: homeLat, longitude: homeLon }}
 						radius = { radius }
 						strokeWidth = { 1 }
 						strokeColor = { '#1a66ff' }
 						fillColor = { 'rgba(230,238,255,0.5)' }
         			/>
+					<MapView.Marker coordinate={{latitude: homeLat, longitude: homeLon}}>
+						<MaterialCommunityIcons name={'home'} size={ 20 } color={ '#2344CE' } />
+					</MapView.Marker>
 
 					{ markers.map((element, index) => {
 						if(index == 0) {
@@ -245,7 +360,20 @@ export default function Gps({ route }) {
 							return (null)
 						}})
 					}
-				</MapView>)
+					{/* { (slider != 'history')
+					? (null)
+					: (<Polyline 
+						coordinates={linesMarkers(markers)}
+						strokeWidth={6}
+						strokeColor='rgba(26,102,255,0.3)'
+					/> )
+					} */}
+					<Polyline 
+						coordinates={linesMarkers(markers)}
+						strokeWidth={6}
+						strokeColor='rgba(26,102,255,0.3)'
+					/> 
+					</MapView>)
 				} 
 				
 			</View>

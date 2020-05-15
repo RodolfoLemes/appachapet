@@ -6,8 +6,8 @@ import api from '../services/api'
 import AuthContext from '../contexts/auth'
 import dataStyles from '../styles/dataStyles';
 
-export default function Data() {
-	const { user, token } = useContext(AuthContext)
+export default function Data({ navigation }) {
+	const { user, token, device } = useContext(AuthContext)
 
 	const [petName, setPetName] = useState('')
 	const [humanName, setHumanName] = useState('')
@@ -20,7 +20,6 @@ export default function Data() {
 	const [onFocusPhone, setOnFocusPhone] = useState(false)
 	const [onFocusCep, setOnFocusCep] = useState(false)
 
-	const { device } = route.params
 	const AuthString = 'Bearer ' + token
 
 	// Acionado através de um botão para realizar essas atualizações de dados
