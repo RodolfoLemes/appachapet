@@ -251,15 +251,30 @@ export default function Gps({ route }) {
     	  	</View>
 			<View style={ gpsStyles.middleInfo }>
 				<View style={ gpsStyles.buttonsView }>
-					<AnimatedButton style={ [gpsStyles.buttonView, {transform: [{scale: scaleHistory}]}] } onPressIn={() => {pressIn('history')}} onPressOut={() => {pressOut('history')}} activeOpacity={1}>
+					<AnimatedButton
+						style={ [gpsStyles.buttonView, {transform: [{scale: scaleHistory}]}] }
+						onPressIn={() => {pressIn('history')}}
+						onPressOut={() => {pressOut('history')}}
+						activeOpacity={1}
+					>
 						<MaterialCommunityIcons name={'calendar'} size={ 40 } color={ slider == 'history' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'history' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Histórico</Text>
 					</AnimatedButton>
-					<AnimatedButton style={ [gpsStyles.buttonView, {transform: [{scale: scaleHome}]}] } onPressIn={() => {pressIn('home')}} onPressOut={() => pressOut('home')} activeOpacity={1}>
+					<AnimatedButton
+						style={ [gpsStyles.buttonView, {transform: [{scale: scaleHome}]}] }
+						onPressIn={() => {pressIn('home')}}
+						onPressOut={() => pressOut('home')}
+						activeOpacity={1}
+					>
 						<MaterialCommunityIcons name={'home'} size={ 40 } color={ slider == 'home' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'home' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Casa</Text>
 					</AnimatedButton>
-					<AnimatedButton style={ [gpsStyles.buttonView, {transform: [{scale: scaleFriends}]}] } onPressIn={() => {pressIn('friends')}} onPressOut={() => pressOut('friends')} activeOpacity={1}>
+					<AnimatedButton
+						style={ [gpsStyles.buttonView, {transform: [{scale: scaleFriends}]}] }
+						onPressIn={() => {pressIn('friends')}}
+						onPressOut={() => pressOut('friends')}
+						activeOpacity={1}
+					>
 						<MaterialCommunityIcons name={'dog-side'} size={ 40 } color={ slider == 'friends' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'friends' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Amigos</Text>
 					</AnimatedButton>
