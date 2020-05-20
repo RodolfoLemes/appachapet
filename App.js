@@ -54,7 +54,8 @@ function TabNavigation() {
 				>
 				<Tab.Screen name="Atividade" component={Activity} />
 				<Tab.Screen name="GPS" component={Gps} />
-				<Tab.Screen name="Dados" component={Data} />
+				<Tab.Screen name="Dados" component={Data} 
+				/>
 		</Tab.Navigator>
 	)
 }

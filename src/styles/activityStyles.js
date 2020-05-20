@@ -18,7 +18,7 @@ const activityStyles = StyleSheet.create({
         height: 100,
         width: '85%',
         flexDirection: 'row',
-        marginTop: 25,
+        marginBottom: 5,
         marginLeft: '5%',
     },
 

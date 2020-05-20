@@ -68,7 +68,7 @@ export default function Gps() {
 	const [maxValue, setMaxValue] = useState(100)
 	const [value, setValue] = useState(0)
 	
-	const [slider, setSlider] = useState('history') // history, home ou friends
+	const [slider, setSlider] = useState('') // history, home ou friends
 	const [unit, setUnit] = useState('h') // history, home ou friends
 	
 	const [homeLat, setHomeLat] = useState(null)
@@ -189,13 +189,13 @@ export default function Gps() {
 
 	useEffect(() => {
 	
-		if (slider == 'history'){
+		if (slider == 'history') {
 			setTime(value[0])
 		}
-		else if (slider == 'home'){
+		else if (slider == 'home') {
 			setRadius(value[0])
 		}
-		else if (slider == 'friends'){
+		else if (slider == 'friends') {
 			setRadiusFriends(value[0])
 		}
 		
@@ -203,15 +203,18 @@ export default function Gps() {
 
 	useEffect(() => {
 
-		if (slider == 'history'){
+		if (slider == 'history') {
+			setValue(0)
 			setMaxValue(24)
 			setUnit('h')
 		}
-		else if (slider == 'home'){
+		else if (slider == 'home') {
+			setValue(0)
 			setMaxValue(300)
 			setUnit('m')
 		}
-		else if (slider == 'friends'){
+		else if (slider == 'friends') {
+			setValue(0)
 			setMaxValue(800)
 			setUnit('m')
 		}
@@ -219,12 +222,6 @@ export default function Gps() {
 	}, [slider])
 
 	// Functions
-	const renderTextThumb = () => {
-		return (
-			<Text>{Math.floor(value) + ' ' +  unit}</Text>
-		)
-	}
-	
 	const sendingTimeHomeFriendsToApi = () => {
 		clearTimeout(mySetTime)
 
@@ -234,7 +231,6 @@ export default function Gps() {
 		}, 5000);
 	}
 
-	
 	async function submitGeofencing(latitude, longitude) {
 		const response = await api.post(`device/${device._id}/geofencing`, {
 			latitude,
@@ -311,24 +307,26 @@ export default function Gps() {
 						<Text style={ slider == 'friends' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Amigos</Text>
 					</AnimatedButton>
 				</View>
-				<View style={ gpsStyles.middleView }>
-					{/* <View style={{ height: '40%', justifyContent: 'center' }}>
-						<Text style={ { width: 50, left: left } }>
-							{ Math.floor(value) } { unit }
-						</Text>
-					</View> */}
-					<View style={ gpsStyles.sliderView }>
-						<Slider
-							thumbTintColor={ '#2344CE' }
-							minimumTrackTintColor={ '#2344CE' }
-							maximumValue={ maxValue } 
-							value={ value }
-							onValueChange={value => setValue(value)}
-							onSlidingComplete={sendingTimeHomeFriendsToApi}
-							renderAboveThumbComponent={renderTextThumb}
-						/>						
-					</View>
-				</View>
+				{ slider == ''
+				? (null)
+				: (<View style={ gpsStyles.middleView }>
+						<View style={{ height: '40%', justifyContent: 'center' }}>
+							<Text style={ { width: 50, left: left } }>
+								{ Math.floor(value) } { unit }
+							</Text>
+						</View>
+						<View style={ gpsStyles.sliderView }>
+							<Slider
+								thumbTintColor={ '#2344CE' }
+								minimumTrackTintColor={ '#2344CE' }
+								maximumValue={ maxValue } 
+								value={ value }
+								onValueChange={value => setValue(value)}
+								onSlidingComplete={sendingTimeHomeFriendsToApi}
+							/>				
+						</View>
+					</View>) 
+				}
 			</View>	
 	  		<View style= { gpsStyles.mapView }>
 				{ markers === null 

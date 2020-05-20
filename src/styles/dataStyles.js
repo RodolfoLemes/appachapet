@@ -18,8 +18,7 @@ const dataStyles = StyleSheet.create({
         height: 100,
         width: '85%',
         flexDirection: 'row',
-        marginTop: 25,
-        marginBottom: 20,
+        marginBottom: 5,
         marginLeft: '5%',
     },
 
@@ -55,7 +54,7 @@ const dataStyles = StyleSheet.create({
         fontSize: 16,
 	},
 
-    infoNameView: {
+    infoViewFocused: {
         height: 62,
         width: '80%',
         justifyContent: 'center',
@@ -63,7 +62,7 @@ const dataStyles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 10,
         borderColor: '#2344CE',
-        marginVertical: 15,
+        marginVertical: 12,
     },
 
     infoView: {
@@ -74,12 +73,27 @@ const dataStyles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 10,
         borderColor: '#BDBDBD',
-        marginVertical: 15,
+        marginVertical: 12,
     },
 
     infoFont: {
         fontSize: 18,
         color: '#4F4F4F',
+    },
+
+    bottomButton: {
+        height: 62,
+        width: responsiveWidth(80),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        backgroundColor: '#2344CE',
+        marginTop: 12,
+    },
+
+    bottomButtonFont: {
+        fontSize: 18,
+        color: '#fff',
     },
 })
 
