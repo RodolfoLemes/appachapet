@@ -1,10 +1,10 @@
 import  React, { useState, useEffect, useContext, useRef } from 'react';
-import { Text, View, Image, TouchableOpacity, Dimensions, Animated } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Dimensions, Animated, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import io from 'socket.io-client';
-import Slider from 'react-native-slider'
+import { Slider } from "@miblanchard/react-native-slider";
 
 import api from '../services/api'
 import AuthContext from '../contexts/auth'
@@ -29,14 +29,6 @@ import gpsStyles from '../styles/gpsStyles';
 		=> Ex: botão de geofencing da um clique no mapa
 		=> Alerta sem slider
 */
-var mySetTime
-function sendingTimeToApi() {
-	clearTimeout(mySetTime)
-
-	mySetTime = setTimeout(() => {
-		console.log('cu')
-	}, 5000);
-}
 
 let deviceWidth = Dimensions.get('window').width
 
@@ -48,14 +40,27 @@ function moveDataToFirstInMarkers(data, markers) {
 	return arr
 }
 
-export default function Gps({ route }) {
-	const { user, token } = useContext(AuthContext)
+function linesMarkers(markers) {
+	let reverseMarkers = markers.reverse()
+	let arr = []
+	reverseMarkers.map(element => {
+		arr.push({
+			latitude: element.coords.lat,
+			longitude: element.coords.lon
+		})
+	})
+	return arr
+}
+
+export default function Gps() {
+	const { user, token, device } = useContext(AuthContext)
+
+	// States
 
 	const [markers, setMarkers] = useState(null)
 	// Variavel para determinar a quanto tempo o usuario quer pegar localizações
 	// Criar algum tipo de input para setar esse tempo:
 	// Se time = 0, pega todas as localizações, se time = 1 pega todas as localizações de 1 hora atras e assim vai
-	
 	const [time, setTime] = useState(0)
 	const [radius, setRadius] = useState(30)
 	const [radiusFriends, setRadiusFriends] = useState(300)
@@ -69,9 +74,11 @@ export default function Gps({ route }) {
 	const [homeLat, setHomeLat] = useState(null)
 	const [homeLon, setHomeLon] = useState(null)
 
-	// Esse dado dever vir quando ele selecionar o device, vir da navegação
-	const { device } = route.params
+	// Variables
+
 	const AuthString = 'Bearer '.concat(token)
+	const left = value * (deviceWidth-100)/maxValue + deviceWidth*0.1;
+	var mySetTime = null
 
 	// VARIÁVEIS DE ANIMAÇÃO //
 
@@ -136,6 +143,7 @@ export default function Gps({ route }) {
 	
 	// FIM DE FUNÇÕES DE ANIMAÇÃO //
 
+	// Effects
 	useEffect(() => {
 		async function fetchData () {
 			try {
@@ -149,9 +157,11 @@ export default function Gps({ route }) {
 					}
 				})
 				let markersArr = response.data.datas
+				let { geofencing } = response.data
+				setHomeLat(geofencing.coordCentralLat) // substituir por coords da home, obtido no banco de dados
+				setHomeLon(geofencing.coordCentralLon)
+				setRadius(geofencing.radius)
 				setMarkers(markersArr)
-				setHomeLat(markersArr[0].coords.lat) // substituir por coords da home, obtido no banco de dados
-				setHomeLon(markersArr[0].coords.lon)
 			} catch (error) {
 				console.log(error)
 				return false
@@ -159,8 +169,6 @@ export default function Gps({ route }) {
 		}
 		fetchData(device, time)
 	}, [])
-
-	const left = value * (deviceWidth-100)/maxValue + deviceWidth*0.1;
 		
 	// Socket.IO
 	useEffect(() => {
@@ -180,15 +188,15 @@ export default function Gps({ route }) {
 	}, [])
 
 	useEffect(() => {
-
+	
 		if (slider == 'history'){
-			setTime(value)
+			setTime(value[0])
 		}
 		else if (slider == 'home'){
-			setRadius(value)
+			setRadius(value[0])
 		}
 		else if (slider == 'friends'){
-			setRadiusFriends(value)
+			setRadiusFriends(value[0])
 		}
 		
 	}, [value])
@@ -210,27 +218,51 @@ export default function Gps({ route }) {
 		
 	}, [slider])
 
-	/* const renderTextThumb = () => {
-		console.log('sdasdasdsadas')
+	// Functions
+	const renderTextThumb = () => {
 		return (
-			<View style={{ height: 30, width: 30 }}>
-				<Text>aaa</Text>
-			</View>
+			<Text>{Math.floor(value) + ' ' +  unit}</Text>
 		)
-	} */
-	
-	function linesMarkers(markers) {
-		let reverseMarkers = markers.reverse()
-		let arr = []
-		reverseMarkers.map(element => {
-			arr.push({
-				latitude: element.coords.lat,
-				longitude: element.coords.lon
-			})
-		})
-		return arr
 	}
 	
+	const sendingTimeHomeFriendsToApi = () => {
+		clearTimeout(mySetTime)
+
+		mySetTime = setTimeout(() => {
+			fetch('https://www.google.com.br/')
+				.then(response => console.log(JSON.stringify(response)))
+		}, 5000);
+	}
+
+	
+	async function submitGeofencing(latitude, longitude) {
+		const response = await api.post(`device/${device._id}/geofencing`, {
+			latitude,
+			longitude,
+			radius
+		}, {
+			headers:{
+				Authorization: AuthString
+			}
+		})
+
+		if(response.data.sucess) {
+			setHomeLat(latitude)
+			setHomeLon(longitude)
+			console.log('foi')
+		} 
+	}
+
+	const geofencingManagement = (latitude, longitude) => {
+		Alert.alert(
+			"Geofencing",
+			"Deseja configuração a localização central da sua Geofencing?",
+			[
+				{ text: "Não", style: "cancel" },
+				{ text: "Sim", onPress: () => submitGeofencing(latitude, longitude)}
+			]
+		)
+	}
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
     		<View style={ gpsStyles.topInfo }>
@@ -280,11 +312,11 @@ export default function Gps({ route }) {
 					</AnimatedButton>
 				</View>
 				<View style={ gpsStyles.middleView }>
-					<View style={{ height: '40%', justifyContent: 'center' }}>
+					{/* <View style={{ height: '40%', justifyContent: 'center' }}>
 						<Text style={ { width: 50, left: left } }>
 							{ Math.floor(value) } { unit }
 						</Text>
-					</View>
+					</View> */}
 					<View style={ gpsStyles.sliderView }>
 						<Slider
 							thumbTintColor={ '#2344CE' }
@@ -292,7 +324,8 @@ export default function Gps({ route }) {
 							maximumValue={ maxValue } 
 							value={ value }
 							onValueChange={value => setValue(value)}
-							onSlidingComplete={sendingTimeToApi}
+							onSlidingComplete={sendingTimeHomeFriendsToApi}
+							renderAboveThumbComponent={renderTextThumb}
 						/>						
 					</View>
 				</View>
@@ -303,12 +336,12 @@ export default function Gps({ route }) {
 				: (	<MapView
 						style={gpsStyles.mapStyle}
 						region={{
-							latitude: markers[0].coords.lat,
-							longitude: markers[0].coords.lon,
+							latitude: homeLat,
+							longitude: homeLon,
 							latitudeDelta: 0.0022,
 							longitudeDelta: 0.0091
 						}}
-						onLongPress={ (e) => {setHomeLat(e.nativeEvent.coordinate.latitude); setHomeLon(e.nativeEvent.coordinate.longitude)} }
+						onLongPress={ (event) => geofencingManagement(event.nativeEvent.coordinate.latitude, event.nativeEvent.coordinate.longitude ) }
 					>
 					<MapView.Circle
 						center = {{ latitude: homeLat, longitude: homeLon }}
@@ -342,15 +375,19 @@ export default function Gps({ route }) {
 							return (null)
 						}})
 					}
-					{ (slider != 'history')
+					{/* { (slider != 'history')
 					? (null)
 					: (<Polyline 
 						coordinates={linesMarkers(markers)}
 						strokeWidth={6}
 						strokeColor='rgba(26,102,255,0.3)'
 					/> )
-					}
-					
+					} */}
+					<Polyline 
+						coordinates={linesMarkers(markers)}
+						strokeWidth={6}
+						strokeColor='rgba(26,102,255,0.3)'
+					/> 
 					</MapView>)
 				} 
 				

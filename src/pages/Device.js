@@ -8,7 +8,7 @@ import AuthContext from '../contexts/auth'
 import deviceStyles from '../styles/deviceStyles';
 
 export default function Device({ navigation }) {
-	const { forceLogout, user, token } = React.useContext(AuthContext)
+	const { forceLogout, user, token, chosenDevice } = React.useContext(AuthContext)
 	const [modalVisible, setModalVisible] = React.useState(false);
 	const [imei, setImei] = React.useState('')
 	const [name, setName] = React.useState('')
@@ -21,6 +21,7 @@ export default function Device({ navigation }) {
 	}
 
 	function goToGPS(device) {
+		chosenDevice(device)
 		navigation.navigate('TabNavigation', { 
 			screen: 'GPS', 
 			params: { 

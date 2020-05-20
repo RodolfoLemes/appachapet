@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null)
     const [loading, setLoading] = useState(true);
+    const [device, setDevice] = useState(null)
 
     useEffect(() => {
         async function loadStorageData() {
@@ -71,8 +72,14 @@ export const AuthProvider = ({ children }) => {
         setToken(response.data.token)
     }
 
+    function chosenDevice(device) {
+        setDevice(device)
+    }
+
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, token, signIn, signOut, loading, forceLogin, forceLogout }} >
+        <AuthContext.Provider 
+            value={{ signed: !!user, user, token, signIn, signOut, loading, forceLogin, forceLogout, device, chosenDevice }} 
+        >
             {children}
         </AuthContext.Provider>
     )
