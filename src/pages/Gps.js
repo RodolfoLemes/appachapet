@@ -10,26 +10,6 @@ import api from '../services/api'
 import AuthContext from '../contexts/auth'
 import gpsStyles from '../styles/gpsStyles';
 
-// Exemplo de um elemento do array vindo da API
-/* Object {
-    "__v": 0,
-    "_id": "5e8de09c8a139f0021a44e10",
-    "coords": Object {
-      "lat": -23.42464,
-      "lon": -51.92507,
-      "timestamp": 1586356380374,
-    },
-    "createAt": "2020-04-08T14:23:42.230Z",
-    "device": "5e8ddf1d8a139f0021a44e0b",
-    "isWifi": true,
-}, */
-/*  
-=> Tres botoes emcima no mapa, ao clicar suba um pouco e aparece um slider horizontal
-	=> cada botao se relaciona com o proprio slider
-		=> Ex: botão de geofencing da um clique no mapa
-		=> Alerta sem slider
-*/
-
 let deviceWidth = Dimensions.get('window').width
 
 function moveDataToFirstInMarkers(data, markers) {
@@ -40,27 +20,13 @@ function moveDataToFirstInMarkers(data, markers) {
 	return arr
 }
 
-function linesMarkers(markers) {
-	let reverseMarkers = markers.reverse()
-	let arr = []
-	reverseMarkers.map(element => {
-		arr.push({
-			latitude: element.coords.lat,
-			longitude: element.coords.lon
-		})
-	})
-	return arr
-}
 
 export default function Gps() {
 	const { user, token, device } = useContext(AuthContext)
 
 	// States
-
 	const [markers, setMarkers] = useState(null)
-	// Variavel para determinar a quanto tempo o usuario quer pegar localizações
-	// Criar algum tipo de input para setar esse tempo:
-	// Se time = 0, pega todas as localizações, se time = 1 pega todas as localizações de 1 hora atras e assim vai
+
 	const [time, setTime] = useState(0)
 	const [radius, setRadius] = useState(30)
 	const [radiusFriends, setRadiusFriends] = useState(300)
@@ -75,13 +41,11 @@ export default function Gps() {
 	const [homeLon, setHomeLon] = useState(null)
 
 	// Variables
-
 	const AuthString = 'Bearer '.concat(token)
 	const left = value * (deviceWidth-100)/maxValue + deviceWidth*0.1;
 	var mySetTime = null
 
 	// VARIÁVEIS DE ANIMAÇÃO //
-
 	// Componente de animação para TouchableOpacity, já que o animated não o suporta normalmente.
 	const AnimatedButton = Animated.createAnimatedComponent(TouchableOpacity)
 	// Variáveis para mudar a escala dos botões ao serem clicados.
@@ -90,58 +54,6 @@ export default function Gps() {
 	const scaleFriends = useRef(new Animated.Value(1)).current
 
 	// FIM DE VARIÁVEIS DE ANIMAÇÃO //
-
-	// FUNÇÕES DE ANIMAÇÃO //
-	function pressIn(param) {
-		if (param == 'history'){
-			Animated.timing(scaleHistory, {
-				toValue: 0.8,
-				duration: 100,
-				useNativeDriver: true
-			}).start()
-		}
-		else if (param == 'home'){
-			Animated.timing(scaleHome, {
-				toValue: 0.8,
-				duration: 100,
-				useNativeDriver: true
-			}).start()
-		}
-		else if (param == 'friends'){
-			Animated.timing(scaleFriends, {
-				toValue: 0.8,
-				duration: 100,
-				useNativeDriver: true
-			}).start()
-		}
-	}
-
-	function pressOut(param) {
-		if (param == 'history'){
-			Animated.timing(scaleHistory, {
-				toValue: 1,
-				duration: 100,
-				useNativeDriver: true
-			}).start()
-			}
-			else if (param == 'home'){
-			Animated.timing(scaleHome, {
-				toValue: 1,
-				duration: 100,
-				useNativeDriver: true
-			}).start()
-			}
-			else if (param == 'friends'){
-			Animated.timing(scaleFriends, {
-				toValue: 1,
-				duration: 100,
-				useNativeDriver: true
-			}).start()
-		}
-		setSlider(param)
-	}
-	
-	// FIM DE FUNÇÕES DE ANIMAÇÃO //
 
 	// Effects
 	useEffect(() => {
@@ -167,7 +79,7 @@ export default function Gps() {
 				return false
 			}
 		}
-		fetchData(device, time)
+		fetchData()
 	}, [])
 		
 	// Socket.IO
@@ -221,17 +133,123 @@ export default function Gps() {
 		
 	}, [slider])
 
+	// FUNÇÕES DE ANIMAÇÃO //
+	function pressIn(param) {
+		if (param == 'history'){
+			Animated.timing(scaleHistory, {
+				toValue: 0.8,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+		}
+		else if (param == 'home'){
+			Animated.timing(scaleHome, {
+				toValue: 0.8,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+		}
+		else if (param == 'friends'){
+			Animated.timing(scaleFriends, {
+				toValue: 0.8,
+				duration: 100,
+				useNativeDriver: true
+			}).start()
+		}
+	}
+
+	function pressOut(param) {
+		if(param == slider) {
+			if (param == 'history'){
+				Animated.timing(scaleHistory, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true
+				}).start()
+				}
+				else if (param == 'home'){
+				Animated.timing(scaleHome, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true
+				}).start()
+				}
+				else if (param == 'friends'){
+				Animated.timing(scaleFriends, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true
+				}).start()
+			}
+			setSlider('')
+		} else {
+			if (param == 'history'){
+				Animated.timing(scaleHistory, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true
+				}).start()
+				}
+				else if (param == 'home'){
+				Animated.timing(scaleHome, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true
+				}).start()
+				}
+				else if (param == 'friends'){
+				Animated.timing(scaleFriends, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true
+				}).start()
+			}
+			setSlider(param)
+		}
+	}
+	// FIM DE FUNÇÕES DE ANIMAÇÃO //
+
 	// Functions
+	function linesMarkers() {
+		let arr = []
+		markers.map(element => {
+			arr.push({
+				latitude: element.coords.lat,
+				longitude: element.coords.lon
+			})
+		})
+		return arr
+	}
+
 	const sendingTimeHomeFriendsToApi = () => {
 		clearTimeout(mySetTime)
 
 		mySetTime = setTimeout(() => {
-			fetch('https://www.google.com.br/')
-				.then(response => console.log(JSON.stringify(response)))
+			if(slider == 'history') {
+				submitTime()
+			} else if(slider == 'home') {
+				submitGeofencing()
+			} else if(slider == 'friends') {
+				console.log('foda-se')
+			}
 		}, 5000);
 	}
 
-	async function submitGeofencing(latitude, longitude) {
+	async function submitTime() {
+		const response = await api.get('coords', {
+			params: {
+				device: device._id,
+				time
+			},
+			headers: {
+				Authorization: AuthString
+			}
+		})
+		let markersArr = response.data.datas
+		setMarkers(markersArr)
+	}
+
+	async function submitGeofencing(latitude = homeLat, longitude = homeLon) {
 		const response = await api.post(`device/${device._id}/geofencing`, {
 			latitude,
 			longitude,
@@ -259,6 +277,7 @@ export default function Gps() {
 			]
 		)
 	}
+
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
     		<View style={ gpsStyles.topInfo }>
@@ -281,8 +300,8 @@ export default function Gps() {
 				<View style={ gpsStyles.buttonsView }>
 					<AnimatedButton
 						style={ [gpsStyles.buttonView, {transform: [{scale: scaleHistory}]}] }
-						onPressIn={() => {pressIn('history')}}
-						onPressOut={() => {pressOut('history')}}
+						onPressIn={() => pressIn('history')}
+						onPressOut={() => pressOut('history')}
 						activeOpacity={1}
 					>
 						<MaterialCommunityIcons name={'calendar'} size={ 40 } color={ slider == 'history' ? '#2344CE' : 'gray' } />
@@ -290,7 +309,7 @@ export default function Gps() {
 					</AnimatedButton>
 					<AnimatedButton
 						style={ [gpsStyles.buttonView, {transform: [{scale: scaleHome}]}] }
-						onPressIn={() => {pressIn('home')}}
+						onPressIn={() => pressIn('home')}
 						onPressOut={() => pressOut('home')}
 						activeOpacity={1}
 					>
@@ -299,7 +318,7 @@ export default function Gps() {
 					</AnimatedButton>
 					<AnimatedButton
 						style={ [gpsStyles.buttonView, {transform: [{scale: scaleFriends}]}] }
-						onPressIn={() => {pressIn('friends')}}
+						onPressIn={() => pressIn('friends')}
 						onPressOut={() => pressOut('friends')}
 						activeOpacity={1}
 					>
@@ -369,23 +388,17 @@ export default function Gps() {
 									/>
 								</Marker>
 							)
-						} else {
-							return (null)
 						}})
 					}
-					{/* { (slider != 'history')
-					? (null)
-					: (<Polyline 
-						coordinates={linesMarkers(markers)}
-						strokeWidth={6}
-						strokeColor='rgba(26,102,255,0.3)'
-					/> )
-					} */}
-					<Polyline 
-						coordinates={linesMarkers(markers)}
-						strokeWidth={6}
-						strokeColor='rgba(26,102,255,0.3)'
-					/> 
+					{ 	(slider == 'history' || slider == '')
+						? (<Polyline 
+							coordinates={linesMarkers()}
+							strokeWidth={6}
+							strokeColor='rgba(26,102,255,0.3)'
+							/>)
+						: (null)
+					}
+					
 					</MapView>)
 				} 
 				

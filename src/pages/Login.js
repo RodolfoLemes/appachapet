@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, TouchableOpacity, Image, Animated } from 'react-native';
+import { Text, View, TouchableOpacity, Image, Animated, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import * as Google from 'expo-google-app-auth';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -25,7 +25,7 @@ async function signInWithGoogleAsync() {
 }
 
 export default function Login() {
-	const { forceLogin, signIn } = React.useContext(AuthContext)
+	const { forceLogin, signIn, user } = React.useContext(AuthContext)
 
 	// VARIÁVEIS DE ANIMAÇÃO //
 
@@ -34,6 +34,8 @@ export default function Login() {
 	// Variável para deslocar a view em Y
 	const changeY = useRef(new Animated.Value(0)).current
 	const imgChangeY = useRef(new Animated.Value(0)).current
+	// Variável para alterar opacidade
+	const opacity = useRef(new Animated.Value(1)).current
 
 
 	// FIM DE VARIÁVEIS DE ANIMAÇÃO //
@@ -45,6 +47,7 @@ export default function Login() {
 
 	async function login() {
 		changingY()
+		//changingOpacity()
 		forceLogin()
 	}
 
@@ -63,11 +66,28 @@ export default function Login() {
 		]).start()
 	}
 
+	/* function changingOpacity() {
+		while(user == null) {
+			Animated.timing(opacity, {
+				toValue: 0,
+				duration: 500,
+				useNativeDriver: true
+			}).start()
+			Animated.timing(opacity, {
+				toValue: 1,
+				duration: 500,
+				useNativeDriver: true
+			}).start()
+		}	
+	} */
+
 	return (
+		
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
+			<StatusBar backgroundColor={'#2147D6'} barStyle={'light-content'} />
 			<TouchableOpacity style={ loginStyles.logoView } onPress={login}>
 				<Animated.Image
-					style={ [loginStyles.logoViewImg, {transform: [{translateY: imgChangeY}]}] }
+					style={ [loginStyles.logoViewImg, {transform: [{translateY: imgChangeY}]}, {opacity: opacity}] }
 					source={require('../../assets/logo.png')}
 				/>
 			</TouchableOpacity>
