@@ -28,9 +28,9 @@ const loginStyles = StyleSheet.create({
     },
 
     bottomView: {
-        flex: 2,
+        flex: 1.8,
         width: responsiveWidth(100),
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -38,18 +38,43 @@ const loginStyles = StyleSheet.create({
     },
 
     googleBtn: {
+        flexDirection: 'row',
         height: 50,
-        width: responsiveWidth(60),
-        justifyContent: 'center',
+        width: responsiveWidth(75),
+        justifyContent: 'space-evenly',
         alignItems: 'center',
-        marginTop: responsiveHeight(5),
+        marginTop: responsiveHeight(7),
         borderRadius: 15,
         backgroundColor: '#2147D6'
     },
 
     googleTxt: {
         color: '#fff',
-    }
+        fontSize: 16
+    },
+
+    socialMediaView: {
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: '10%',
+    },
+
+    socialMediaBtns: {
+        width: 140,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+
+    socialMediaBtn: {
+        height: 56,
+        width: 56,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 28,
+        borderWidth: 2,
+        borderColor: '#777'
+    },
 })
 
 export default loginStyles;

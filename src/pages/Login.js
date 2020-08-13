@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Text, View, TouchableOpacity, Image, Animated } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
 import * as Google from 'expo-google-app-auth';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -71,10 +72,25 @@ export default function Login() {
 					source={require('../../assets/logo.png')}
 				/>
 			</TouchableOpacity>
+
 			<Animated.View style={ [loginStyles.bottomView, {transform: [{translateY: changeY}]}] }>
 				<TouchableOpacity style={ loginStyles.googleBtn } onPress={sign}>
+					<MaterialCommunityIcons name={'google-glass'} size={ 32 } color={ 'white' } />
 					<Text style={ loginStyles.googleTxt }>Entrar com Google</Text>
 				</TouchableOpacity>
+				<View style={ loginStyles.socialMediaView }>
+					<View>
+						<Text>Siga-nos nas redes sociais!</Text>
+					</View>
+					<View style={ loginStyles.socialMediaBtns }>
+						<TouchableOpacity style={ loginStyles.socialMediaBtn }>
+							<MaterialCommunityIcons name={'facebook'} size={ 40 } color={ '#777' } />
+						</TouchableOpacity>
+						<TouchableOpacity style={ loginStyles.socialMediaBtn }>
+							<Ionicons name={'logo-instagram'} size={ 40 } color={ '#777' } />
+						</TouchableOpacity>
+					</View>
+				</View>
 			</Animated.View>
 		</SafeAreaView>
 	);

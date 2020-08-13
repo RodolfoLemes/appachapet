@@ -3,7 +3,6 @@
     "name": "AchaPet",
     "slug": "appachapet",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
@@ -25,9 +24,9 @@
     ],
     "ios": {
       "supportsTablet": true
-	},
-	"android": {
-		"package": "com.achapet"
-  }
+    },
+    "android": {
+      "package": "com.achapet"
+    }
   }
 }
