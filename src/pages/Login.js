@@ -4,6 +4,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
 import * as Google from 'expo-google-app-auth';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
+import { StatusBar } from 'expo-status-bar';
 
 import api from '../services/api'
 import AuthContext from '../contexts/auth'

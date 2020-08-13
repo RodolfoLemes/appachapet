@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import AuthContext, { AuthProvider } from './src/contexts/auth';
 
+import Tutorial from './src/pages/Tutorial'
 import Login from './src/pages/Login'
 import Device from './src/pages/Device'
 import Activity from './src/pages/Activity'
@@ -91,7 +92,7 @@ const HomeRoutes = () => (
 
 const LoginRoutes = () => (
 	<StackLogin.Navigator>
-		<StackLogin.Screen options={{ headerShown: false }} name='Login' component={ Login } />
+		<StackLogin.Screen options={{ headerShown: false }} name='Login' component={ Tutorial } />
 	</StackLogin.Navigator>
 )
 
