@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Text, View, Image, KeyboardAvoidingView, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
@@ -10,12 +10,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export default function Data({ navigation }) {
 	const { user, token, device } = useContext(AuthContext)
 
+	const textRef = useRef(null)
+
 	const [editable, isEditable] = useState(false)
-	const [petName, setPetName] = useState('')
-	const [humanName, setHumanName] = useState('')
-	const [emergPhone, setEmergPhone] = useState('')
-	const [phone, setPhone] = useState('')
-	const [cep, setCep] = useState('')
+	const [petName, setPetName] = useState(device.name)
+	const [humanName, setHumanName] = useState(user.name)
+	const [emergPhone, setEmergPhone] = useState(device.emergencialPhone)
+	const [phone, setPhone] = useState(user.phone)
+	const [cep, setCep] = useState(device.cep)
 	const [onFocusPetName, setOnFocusPetName] = useState(false)
 	const [onFocusHumanName, setOnFocusHumanName] = useState(false)
 	const [onFocusEmergPhone, setOnFocusEmergPhone] = useState(false)
@@ -24,26 +26,38 @@ export default function Data({ navigation }) {
 
 	const AuthString = 'Bearer ' + token
 
-	// Acionado através de um botão para realizar essas atualizações de dados
-	// PRECISA SER ADICIONADO
-	async function sendData() {
-		const response = await api.patch(`device/${device._id}`, {
-			petName,
-			emergencialPhone: emergPhone,
-			cep,
-			phone
-		}, {
-			header: { 
-				Authorization: AuthString 
-			}
-		})
+	useEffect(() => {
+		if(editable) {
+			textRef.current.focus()
+		} else {
+			textRef.current.blur()
+		}
+	}, [editable])
 
-		const { user: newUser, device: newDevice } = response.data
-		setPetName(newDevice.name)
-		setHumanName(newUser.name)
-		setEmergPhone(newDevice.emergencialPhone)
-		setPhone(newUser.phone)
-		setCep(newDevice.cep)
+	async function sendData() {
+		if(!editable) {
+			isEditable(!editable)
+		} else {
+			const response = await api.patch(`device/${device._id}`, {
+				petName,
+				emergencialPhone: emergPhone,
+				cep,
+				phone
+			}, {
+				headers: { 
+					Authorization: AuthString 
+				}
+			})
+	
+			const { user: newUser, device: newDevice } = response.data
+			setPetName(newDevice.name)
+			setHumanName(newUser.name)
+			setEmergPhone(newDevice.emergencialPhone)
+			setPhone(newUser.phone)
+			setCep(newDevice.cep)
+
+			isEditable(!editable)
+		}
 	}
 
 	return (
@@ -67,6 +81,7 @@ export default function Data({ navigation }) {
 						</View>
 					</View>
 					<TextInput
+						ref={textRef}
 						style={ onFocusPetName ? dataStyles.infoViewFocused : dataStyles.infoView }
 						onChangeText={id => setPetName(id)}
 						onFocus={() => setOnFocusPetName(true)}
@@ -86,7 +101,7 @@ export default function Data({ navigation }) {
 						value={humanName}
 						placeholder='Nome do humano'
 						placeholderTextColor='#777'
-						editable={editable}
+						editable={false}
 					/>
 					<TextInput
 						style={ onFocusEmergPhone ? dataStyles.infoViewFocused : dataStyles.infoView }
@@ -121,7 +136,7 @@ export default function Data({ navigation }) {
 					/>
 					<TouchableOpacity 
 						style={ dataStyles.bottomButton }
-						onPress={() => isEditable(!editable)}
+						onPress={sendData}
 					>
 						<Text style={ dataStyles.bottomButtonFont }>{ editable ? 'Enviar' : 'Editar' }</Text>
 					</TouchableOpacity>
