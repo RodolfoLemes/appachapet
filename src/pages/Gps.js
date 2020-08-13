@@ -33,12 +33,14 @@ export default function Gps() {
 	
 	const [maxValue, setMaxValue] = useState(100)
 	const [value, setValue] = useState(0)
-	
+
 	const [slider, setSlider] = useState('') // history, home ou friends
 	const [unit, setUnit] = useState('h') // history, home ou friends
 	
 	const [homeLat, setHomeLat] = useState(null)
 	const [homeLon, setHomeLon] = useState(null)
+
+	const [battery, setBattery] = useState(device.battery)
 
 	// Variables
 	const AuthString = 'Bearer '.concat(token)
@@ -94,13 +96,14 @@ export default function Gps() {
 		})
 		socket.on('data', data => {
 			console.log('FOI BUSCRANA')
-			let arr = moveDataToFirstInMarkers(data, markers)
+			let arr = moveDataToFirstInMarkers(data.data, markers)
+			setBattery(data.battery)
 			setMarkers(arr)
 		})
 	}, [])
 
 	useEffect(() => {
-	
+		console.log(value[0])
 		if (slider == 'history') {
 			setTime(value[0])
 		}
@@ -121,7 +124,7 @@ export default function Gps() {
 			setUnit('h')
 		}
 		else if (slider == 'home') {
-			setValue(0)
+			setValue(radius)
 			setMaxValue(300)
 			setUnit('m')
 		}
@@ -280,25 +283,32 @@ export default function Gps() {
 
 	return (
 		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
-    		<View style={ gpsStyles.topInfo }>
-        		<View style={ gpsStyles.topInfoTexts }>
-          			<View style={ gpsStyles.topInfoTextsTitle }>
-            			<Text style={ gpsStyles.topInfoTextsTitleFont }>Tudo certo</Text>
-          			</View>
-          			<View style={ gpsStyles.topInfoTextsSubtitle }>
-            			<Text style={ gpsStyles.topInfoTextsSubtitleFont }>Estou em casa</Text>
-          			</View>
-        		</View>
-        		<View style={ gpsStyles.topInfoImg }>
-          			<Image
-            		style={ gpsStyles.topInfoImg }
-            		source={ require('../../assets/dog.jpg') }
-          			/>
-        		</View>
-    	  	</View>
+			<View style={ gpsStyles.topInfo }>
+				<View style={ gpsStyles.topInfoTexts }>
+					<View style={ gpsStyles.topInfoTextsTitle }>
+						<Text style={ gpsStyles.topInfoTextsTitleFont }>
+							{ markers ? (markers[0].isWifi ? 'Tudo certo' : (markers[0].isGeofencing ? 'Tudo certo' : 'ALERTA PRETO')) : (null) }
+						</Text>
+					</View>
+					<View style={ gpsStyles.topInfoTextsSubtitle }>
+						<Text style={ gpsStyles.topInfoTextsSubtitleFont }>
+							{ markers ? (markers[0].isWifi ? 'Seu pet está dentro do seu Wi-fi' : (markers[0].isGeofencing ? 'Seu pet está na redondezas' : 'SEU PET SAIU SOCORORRORO')) : (null) }
+						</Text>
+					</View>
+					<View style={ gpsStyles.topInfoTextsSubtitle }>
+						<Text style={ gpsStyles.topInfoTextsSubtitleFont }>{"A bateria está " + device.battery}</Text>
+					</View>
+				</View>
+				<View style={ gpsStyles.topInfoImg }>
+					<Image
+						style={ gpsStyles.topInfoImg }
+						source={ require('../../assets/dog.jpg') }
+					/>
+				</View>
+			</View>
 			<View style={ gpsStyles.middleInfo }>
 				<View style={ gpsStyles.buttonsView }>
-					<AnimatedButton
+					{/* <AnimatedButton
 						style={ [gpsStyles.buttonView, {transform: [{scale: scaleHistory}]}] }
 						onPressIn={() => pressIn('history')}
 						onPressOut={() => pressOut('history')}
@@ -306,8 +316,8 @@ export default function Gps() {
 					>
 						<MaterialCommunityIcons name={'calendar'} size={ 40 } color={ slider == 'history' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'history' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Histórico</Text>
-					</AnimatedButton>
-					<AnimatedButton
+					</AnimatedButton> */}
+					{/* <AnimatedButton
 						style={ [gpsStyles.buttonView, {transform: [{scale: scaleHome}]}] }
 						onPressIn={() => pressIn('home')}
 						onPressOut={() => pressOut('home')}
@@ -315,8 +325,8 @@ export default function Gps() {
 					>
 						<MaterialCommunityIcons name={'home'} size={ 40 } color={ slider == 'home' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'home' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Casa</Text>
-					</AnimatedButton>
-					<AnimatedButton
+					</AnimatedButton> */}
+					{/* <AnimatedButton
 						style={ [gpsStyles.buttonView, {transform: [{scale: scaleFriends}]}] }
 						onPressIn={() => pressIn('friends')}
 						onPressOut={() => pressOut('friends')}
@@ -324,7 +334,7 @@ export default function Gps() {
 					>
 						<MaterialCommunityIcons name={'dog-side'} size={ 40 } color={ slider == 'friends' ? '#2344CE' : 'gray' } />
 						<Text style={ slider == 'friends' ? {color: '#2344CE', fontSize: 14} : {color: 'gray', fontSize: 12} }>Amigos</Text>
-					</AnimatedButton>
+					</AnimatedButton> */}
 				</View>
 				{ slider == ''
 				? (null)
@@ -346,7 +356,7 @@ export default function Gps() {
 						</View>
 					</View>) 
 				}
-			</View>	
+				</View>
 	  		<View style= { gpsStyles.mapView }>
 				{ markers === null 
 				? (null)

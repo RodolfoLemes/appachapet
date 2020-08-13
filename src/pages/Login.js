@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, TouchableOpacity, Image, Animated } from 'react-native';
+import { Text, View, TouchableOpacity, Image, Animated, StatusBar } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
 import * as Google from 'expo-google-app-auth';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
-import { StatusBar } from 'expo-status-bar';
 
 import api from '../services/api'
 import AuthContext from '../contexts/auth'
@@ -12,14 +11,14 @@ import loginStyles from '../styles/loginStyles'
 
 async function signInWithGoogleAsync() {
 	try {
-	  const { type, accessToken, name, email } = await Google.logInAsync({
-		androidClientId: '1030550440349-r3nctpkvrp0ajjjjoh4b2ll9pgvirptc.apps.googleusercontent.com',
-		scopes: ['profile', 'email'],
+	  const { type, accessToken, user } = await Google.logInAsync({
+			androidClientId: '1030550440349-r3nctpkvrp0ajjjjoh4b2ll9pgvirptc.apps.googleusercontent.com',
+			scopes: ['profile', 'email'],
 	  });
 	  if (type === 'success') {
-		return { accessToken, user: { name, email } };
+			return { accessToken, user: user };
 	  } else {
-		return { cancelled: true };
+			return { cancelled: true };
 	  }
 	} catch (e) {
 	  return { error: true };
@@ -43,8 +42,14 @@ export default function Login() {
 	// FIM DE VARIÁVEIS DE ANIMAÇÃO //
 
 	async function sign() {
-		const { accessToken, user } = await signInWithGoogleAsync()
-		console.log(accessToken, user)
+		changingY()
+		try {
+			const { accessToken, user } = await signInWithGoogleAsync()
+			console.log(accessToken, user)
+			signIn(user)
+		} catch (err) {
+			console.log("buguei, me ajuda" + err)
+		}
 	}
 
 	async function login() {
@@ -83,17 +88,18 @@ export default function Login() {
 		}	
 	} */
 
+	StatusBar.setBarStyle("light-content")
+	StatusBar.setBackgroundColor('#2147D6')
+
 	return (
 		
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
-			<StatusBar backgroundColor={'#2147D6'} barStyle={'light-content'} />
 			<TouchableOpacity style={ loginStyles.logoView } onPress={login}>
 				<Animated.Image
 					style={ [loginStyles.logoViewImg, {transform: [{translateY: imgChangeY}]}, {opacity: opacity}] }
 					source={require('../../assets/logo.png')}
 				/>
 			</TouchableOpacity>
-
 			<Animated.View style={ [loginStyles.bottomView, {transform: [{translateY: changeY}]}] }>
 				<TouchableOpacity style={ loginStyles.googleBtn } onPress={sign}>
 					<MaterialCommunityIcons name={'google-glass'} size={ 32 } color={ 'white' } />

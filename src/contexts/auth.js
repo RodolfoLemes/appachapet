@@ -18,7 +18,6 @@ function Sign() {
     })
 }
 
-
 export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
@@ -43,13 +42,16 @@ export const AuthProvider = ({ children }) => {
         loadStorageData();
     }, [])
 
-    async function signIn() {
+    async function signIn(user) {
         // Função para fazer o login na api
-        const response = await auth.Signin()
-        setUser(response.user)
+        let { email, name } = user
 
-        await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
-        await AsyncStorage.setItem('@RNAuth:token', response.token);
+        const response = await api.post('autenticate', { email, name })
+        setUser(response.data.user)
+        setToken(response.data.token)
+
+        //await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
+        //await AsyncStorage.setItem('@RNAuth:token', response.token);
     }
 
     function signOut() {

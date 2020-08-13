@@ -93,17 +93,6 @@ export default function Data({ navigation }) {
 						editable={editable}
 					/>
 					<TextInput
-						style={ onFocusHumanName ? dataStyles.infoViewFocused : dataStyles.infoView }
-						onChangeText={id => setHumanName(id)}
-						onFocus={() => setOnFocusHumanName(true)}
-						onBlur={() => setOnFocusHumanName(false)}
-						autoCapitalize='words'
-						value={humanName}
-						placeholder='Nome do humano'
-						placeholderTextColor='#777'
-						editable={false}
-					/>
-					<TextInput
 						style={ onFocusEmergPhone ? dataStyles.infoViewFocused : dataStyles.infoView }
 						onChangeText={id => setEmergPhone(id)}
 						onFocus={() => setOnFocusEmergPhone(true)}

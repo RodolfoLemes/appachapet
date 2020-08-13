@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Modal, Text, View, Image, TouchableOpacity, ScrollView, Alert, TextInput, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import axios from 'axios'
 
 import api from '../services/api'
 import AuthContext from '../contexts/auth'
@@ -12,6 +13,9 @@ export default function Device({ navigation }) {
 	const [modalVisible, setModalVisible] = React.useState(false);
 	const [imei, setImei] = React.useState('')
 	const [name, setName] = React.useState('')
+	const [ssid, setSsid] = React.useState('')
+	const [password, setPassword] = React.useState('')
+	const [config, isConfig] = React.useState(false)
 	const [devices, setDevices] = React.useState(user.devices)
 	const [onFocusName, setOnFocusName] = React.useState(false)
 	const [onFocusImei, setOnFocusImei] = React.useState(false)
@@ -23,7 +27,7 @@ export default function Device({ navigation }) {
 	function goToGPS(device) {
 		chosenDevice(device)
 		navigation.navigate('TabNavigation', { 
-			screen: 'GPS', 
+			screen: 'Dados', /* trocar 'Dados' por 'GPS', deixei 'Dados' porque o GPS tá dando erro */
 			params: { 
 				device 
 			} 
@@ -55,7 +59,23 @@ export default function Device({ navigation }) {
 		}
 	}
 	
+	async function sendConfig() {
+		if(ssid.length < 1 || password.length < 1) {
+			Alert.alert('Faça as coisas certas, por favor. Insira um nome e um imei decente')
+		} else {
+			const response = await axios.get(`http://192.168.1.100/setupwifi?ssid=${ssid}&password=${password}`)
+	
+			const imei = response.data
+			
+			console.log(imei)
 
+			setImei(imei)
+			isConfig(true)
+		}
+	}
+
+	StatusBar.setBarStyle("dark-content")
+	StatusBar.setBackgroundColor('#ffffff')
 
 	return (
 		<SafeAreaView forceInset={{ top: 'always' }} style={ deviceStyles.container }>
@@ -114,32 +134,63 @@ export default function Device({ navigation }) {
 					<View style={{ flex: 1, marginTop: 20 }}>
 						<Text style={ deviceStyles.titleText }>Novo dispositivo</Text>
 					</View>
-					<View style={{ flex: 4, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-						<TextInput
-							style={ onFocusName ? deviceStyles.infoTxtFocused : deviceStyles.infoTxt }
-							onChangeText={user => setName(user)}
-							onFocus={() => setOnFocusName(true)}
-							onBlur={() => setOnFocusName(false)}
-							autoCapitalize='words'
-							value={name}
-							placeholder='Nome do pet'
-							placeholderTextColor='#777'
-						/>
-						<TextInput
-							style={ onFocusImei ? deviceStyles.infoTxtFocused : deviceStyles.infoTxt }
-							onChangeText={id => setImei(id)}
-							onFocus={() => setOnFocusImei(true)}
-							onBlur={() => setOnFocusImei(false)}
-							autoCapitalize='characters'
-							value={imei}
-							placeholder='IMEI da coleira'
-							placeholderTextColor='#777'
-						/>
-						
-						<TouchableOpacity onPress={createDevice} style={ deviceStyles.registerTcb }>
-							<Text style={ deviceStyles.registerTxt }>Registrar</Text>
-						</TouchableOpacity>
-					</View>
+						{ !isConfig
+							? (
+									<View style={{ flex: 4, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+										<TextInput
+											style={ onFocusName ? deviceStyles.infoTxtFocused : deviceStyles.infoTxt }
+											onChangeText={user => setName(user)}
+											onFocus={() => setOnFocusName(true)}
+											onBlur={() => setOnFocusName(false)}
+											autoCapitalize='words'
+											value={name}
+											placeholder='Nome do pet'
+											placeholderTextColor='#777'
+										/>
+										<TextInput
+											style={ onFocusImei ? deviceStyles.infoTxtFocused : deviceStyles.infoTxt }
+											onChangeText={id => setImei(id)}
+											onFocus={() => setOnFocusImei(true)}
+											onBlur={() => setOnFocusImei(false)}
+											autoCapitalize='characters'
+											value={imei}
+											editable={false}
+											placeholder='IMEI da coleira'
+											placeholderTextColor='#777'
+										/>
+										<TouchableOpacity onPress={createDevice} style={ deviceStyles.registerTcb }>
+											<Text style={ deviceStyles.registerTxt }>Registrar</Text>
+										</TouchableOpacity>
+									</View>
+								)
+							: (
+									<View style={{ flex: 4, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+										<TextInput
+											style={ onFocusName ? deviceStyles.infoTxtFocused : deviceStyles.infoTxt }
+											onChangeText={ssid => setSsid(ssid)}
+											onFocus={() => setOnFocusName(true)}
+											onBlur={() => setOnFocusName(false)}
+											autoCapitalize='words'
+											value={ssid}
+											placeholder='Nome do seu Wi-Fi'
+											placeholderTextColor='#777'
+										/>
+										<TextInput
+											style={ onFocusImei ? deviceStyles.infoTxtFocused : deviceStyles.infoTxt }
+											onChangeText={pass => setPassword(pass)}
+											onFocus={() => setOnFocusImei(true)}
+											onBlur={() => setOnFocusImei(false)}
+											autoCapitalize='characters'
+											value={password}
+											placeholder='Senha do seu Wi-Fi'
+											placeholderTextColor='#777'
+										/>
+										<TouchableOpacity onPress={sendConfig} style={ deviceStyles.registerTcb }>
+											<Text style={ deviceStyles.registerTxt }>Enviar</Text>
+										</TouchableOpacity>
+									</View>
+								)
+						}
 					<View style={{ flex: 1 }}>
 					</View>
 				</View>

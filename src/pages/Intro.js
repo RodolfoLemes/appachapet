@@ -7,36 +7,27 @@ import Login from './Login'
 
 const slides = [ // Para a intro
 	{
+		key: 'one',
 	  image: require('../../assets/dog.jpg'),
 	},
 	{
+		key: 'two',
 	  image: require('../../assets/dog.jpg'),
 	},
 	{
+		key: 'tree',
 	  image: require('../../assets/dog.jpg'),
 	}
-  ];
-
-const slidesTutorial = [	// Para o tutorial
-  {
-    image: require('../../assets/dog.jpg'),
-  },
-  {
-    image: require('../../assets/dog.jpg'),
-  },
-  {
-    image: require('../../assets/dog.jpg'),
-  }
 ];
 
-export default function Tutorial() {
+export default function Intro() {
   
 	const [showRealApp, setShowRealApp] = useState(false)
 
 	const _renderItem = ({ item }) => {
 		return (
-		<ImageBackground style={styles.slide} source={item.image}/>
-		  );
+			<ImageBackground style={styles.slide} source={item.image}/>
+		);
 	}
 	
 	const _onDone = () => {
@@ -46,7 +37,7 @@ export default function Tutorial() {
 	const _renderNextButton = () => {
 		return (
 		  <View style={styles.buttonCircle}>
-			<MaterialCommunityIcons name={'arrow-right-circle'} size={35} color={'white'} />
+				<MaterialCommunityIcons name={'arrow-right-circle'} size={35} color={'white'} />
 		  </View>
 		);
 	};
@@ -54,30 +45,31 @@ export default function Tutorial() {
 	const _renderDoneButton = () => {
 		return (
 		  <View style={styles.buttonCircle}>
-			<MaterialCommunityIcons name={'check-circle'} size={35} color={'white'} />
+				<MaterialCommunityIcons name={'check-circle'} size={35} color={'white'} />
 		  </View>
 		);
 	};
 
-if (showRealApp) {
-    return <Login />;
-} else {
-    return(
-	<AppIntroSlider 
-		renderItem={_renderItem}
-		data={slides}
-		onDone={_onDone}
-		renderDoneButton={_renderDoneButton}
-        renderNextButton={_renderNextButton}
-		/>
-	)}
+	if (showRealApp) {
+		return <Login />;
+	} else {
+		return(
+			<AppIntroSlider 
+				renderItem={_renderItem}
+				data={slides}
+				onDone={_onDone}
+				renderDoneButton={_renderDoneButton}
+				renderNextButton={_renderNextButton}
+			/>
+		)
+	}
 }
 
 const styles = StyleSheet.create({
 	slide: {
 		flex: 1,
 		resizeMode: 'cover',
-	  },
+	},
 	image: {
 	  width: 320,
 	  height: 320,
@@ -88,4 +80,4 @@ const styles = StyleSheet.create({
 	  color: 'white',
 	  textAlign: 'center',
 	},
-  });
+});

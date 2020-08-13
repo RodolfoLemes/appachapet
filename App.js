@@ -8,12 +8,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import AuthContext, { AuthProvider } from './src/contexts/auth';
 
-import Tutorial from './src/pages/Tutorial'
+import Intro from './src/pages/Intro'
 import Login from './src/pages/Login'
 import Device from './src/pages/Device'
 import Activity from './src/pages/Activity'
 import Gps from './src/pages/Gps'
 import Data from './src/pages/Data'
+import Info from './src/pages/Info'
 
 YellowBox.ignoreWarnings([
 	'Unrecognized WebSocket'
@@ -42,6 +43,11 @@ function TabNavigation() {
 							? 'paw' 
 							: 'paw';
 							}
+						else if (route.name === 'Info') {
+							iconName = focused 
+							? 'information-outline' 
+							: 'information-outline';
+							}
 						return <MaterialCommunityIcons name={iconName} size={50} color={color} />
 					}}
 				)}
@@ -53,7 +59,8 @@ function TabNavigation() {
 				}}
 				
 				>
-				<Tab.Screen name="Atividade" component={Activity} />
+				{ /*<Tab.Screen name="Atividade" component={Activity} /> */ }
+				<Tab.Screen name='Info' component={Info} />
 				<Tab.Screen name="GPS" component={Gps} />
 				<Tab.Screen name="Dados" component={Data} 
 				/>
@@ -92,7 +99,7 @@ const HomeRoutes = () => (
 
 const LoginRoutes = () => (
 	<StackLogin.Navigator>
-		<StackLogin.Screen options={{ headerShown: false }} name='Login' component={ Tutorial } />
+		<StackLogin.Screen options={{ headerShown: false }} name='Login' component={ Intro } />
 	</StackLogin.Navigator>
 )
 
