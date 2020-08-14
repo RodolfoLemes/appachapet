@@ -17,42 +17,12 @@ const infoStyles = StyleSheet.create({
   },
 
   topInfoImg: {
-    height: 100,
-    width: 100,
-    borderRadius: 50,
+    resizeMode: 'contain',
   },
 
-  topInfoTexts: {
-    height: 100,
-    flex: 1,
-    paddingLeft: 10,
-  },
-
-  topInfoTextsTitle: {
-    height: 40,
-    width: '100%',
-    justifyContent: 'center',
-  },
-
-  topInfoTextsSubtitle: {
-    height: 60,
-    width: '100%',
-  },
-
-  topInfoTextsTitleFont: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-
-  topInfoTextsSubtitleFont: {
-    fontSize: 16,
-  },
-
-  textView: {
-    height: '75%',
-    width: '80%',
-    marginTop: '5%',
-  },
+  middleInfoView: {
+    marginTop: '10%'
+  }
 })
 
 export default infoStyles

@@ -89,7 +89,7 @@ export default function Login() {
 	} */
 
 	StatusBar.setBarStyle("light-content")
-	StatusBar.setBackgroundColor('#2147D6')
+	StatusBar.setBackgroundColor('#3f6de0')
 
 	return (
 		

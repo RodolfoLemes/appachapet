@@ -27,7 +27,7 @@ export default function Device({ navigation }) {
 	function goToGPS(device) {
 		chosenDevice(device)
 		navigation.navigate('TabNavigation', { 
-			screen: 'Dados', /* trocar 'Dados' por 'GPS', deixei 'Dados' porque o GPS tá dando erro */
+			screen: 'GPS', /* trocar 'Dados' por 'GPS', deixei 'Dados' porque o GPS tá dando erro */
 			params: { 
 				device 
 			} 
@@ -84,7 +84,7 @@ export default function Device({ navigation }) {
 					style={ deviceStyles.titleIconView }
 					onPress={ logout }
 					>
-					<MaterialCommunityIcons name={'logout-variant'} size={32} color={'#2147D6'} />
+					<MaterialCommunityIcons name={'logout-variant'} size={32} color={'#3f6de0'} />
 				</TouchableOpacity>
 				<View style={ deviceStyles.titleTextView }>
 					<Text style={ deviceStyles.titleText }>Dispositivos</Text>

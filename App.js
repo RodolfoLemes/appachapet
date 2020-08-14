@@ -42,19 +42,29 @@ function TabNavigation() {
 							iconName = focused 
 							? 'paw' 
 							: 'paw';
-							}
+						}
 						else if (route.name === 'Info') {
 							iconName = focused 
 							? 'information-outline' 
 							: 'information-outline';
-							}
+						}
 						return <MaterialCommunityIcons name={iconName} size={50} color={color} />
 					}}
 				)}
 				tabBarOptions={{
-					activeTintColor: '#2147D6',
+					activeTintColor: '#3f6de0',
 					inactiveTintColor: 'gray',
-					style: {height: 70, elevation:0, borderTopWidth: 0, shadowOpacity:0, marginBottom: 5},
+					style: {
+						position: 'absolute', //GPS
+						bottom: 0, //GPS
+						left: 0, //GPS
+						height: 70,
+						elevation:0,
+						borderTopWidth: 0,
+						shadowOpacity:0,
+						marginBottom: 5,
+						backgroundColor: 'transparent', //GPS (normal é #FFF)
+					},
 					keyboardHidesTabBar: true,
 				}}
 				
@@ -79,8 +89,7 @@ const HomeRoutes = () => (
 			component={ TabNavigation }
 			options={({ navigation }) => ({
 				headerStyle: {
-					backgroundColor: '#fff',
-					elevation: 0
+					elevation: 0,
 				},
 				headerTintColor: '#fff',
 				headerTitleStyle: {
@@ -89,10 +98,12 @@ const HomeRoutes = () => (
 				headerTitle: '',
 				headerLeft: () => (
 					<TouchableOpacity onPress={() => navigation.navigate('Device')} style={{paddingLeft: 10}}>
-						<MaterialCommunityIcons name={'reply'} size={50} color={'#2147D6'} />
+						<MaterialCommunityIcons name={'reply'} size={50} color={'#3f6de0'} />
 					</TouchableOpacity>
-				)
+				),
+				headerTransparent: true,
 			})}
+			
 		/>
 	</StackHome.Navigator>
 )
@@ -117,11 +128,11 @@ export const Router = () => {
 	return signed ? <HomeRoutes /> : <LoginRoutes />
 }
 
-StatusBar.setBackgroundColor('#ffffff')
 StatusBar.setBarStyle("dark-content")
 StatusBar.setHidden(false)
 
 export default function App() {
+
 	return (
 		<NavigationContainer>
 			<AuthProvider>

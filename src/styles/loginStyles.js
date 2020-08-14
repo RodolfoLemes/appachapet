@@ -11,7 +11,7 @@ const loginStyles = StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#2147D6',
+        backgroundColor: '#3f6de0',
     },
 
     logoView: {
@@ -45,7 +45,7 @@ const loginStyles = StyleSheet.create({
         alignItems: 'center',
         marginTop: responsiveHeight(7),
         borderRadius: 15,
-        backgroundColor: '#2147D6'
+        backgroundColor: '#3f6de0'
     },
 
     googleTxt: {

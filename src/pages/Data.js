@@ -76,7 +76,7 @@ export default function Data({ navigation }) {
 						<View style={ dataStyles.topInfoImg }>
 							<Image
 							style={ dataStyles.topInfoImg }
-							source={ require('../../assets/dog.jpg') }
+							source={ require('../../assets/achapet_dog.png') }
 							/>
 						</View>
 					</View>
@@ -102,7 +102,7 @@ export default function Data({ navigation }) {
 						placeholderTextColor='#777'
 						editable={editable}
 					/>
-					<TextInput
+					{/* <TextInput
 						style={ onFocusPhone ? dataStyles.infoViewFocused : dataStyles.infoView }
 						onChangeText={id => setPhone(id)}
 						onFocus={() => setOnFocusPhone(true)}
@@ -111,7 +111,7 @@ export default function Data({ navigation }) {
 						placeholder='Telefone secundário'
 						placeholderTextColor='#777'
 						editable={editable}
-					/>
+					/> */}
 					<TextInput
 						style={ onFocusCep ? dataStyles.infoViewFocused : dataStyles.infoView }
 						onChangeText={id => setCep(id)}

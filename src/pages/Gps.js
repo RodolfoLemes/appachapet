@@ -1,5 +1,5 @@
 import  React, { useState, useEffect, useContext, useRef } from 'react';
-import { Text, View, Image, TouchableOpacity, Dimensions, Animated, Alert } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Dimensions, Animated, Alert, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -27,8 +27,8 @@ export default function Gps() {
 	// States
 	const [markers, setMarkers] = useState(null)
 
-	const [time, setTime] = useState(0)
-	const [radius, setRadius] = useState(30)
+	const [time, setTime] = useState(24)
+	const [radius, setRadius] = useState(10)
 	const [radiusFriends, setRadiusFriends] = useState(300)
 	
 	const [maxValue, setMaxValue] = useState(100)
@@ -74,7 +74,8 @@ export default function Gps() {
 				let { geofencing } = response.data
 				setHomeLat(geofencing.coordCentralLat) // substituir por coords da home, obtido no banco de dados
 				setHomeLon(geofencing.coordCentralLon)
-				setRadius(geofencing.radius)
+				//setRadius(geofencing.radius)
+				setRadius(10)
 				setMarkers(markersArr)
 			} catch (error) {
 				console.log(error)
@@ -281,8 +282,66 @@ export default function Gps() {
 		)
 	}
 
+StatusBar.setBackgroundColor('rgba(0,0,0,0)')
+
 	return (
-		<SafeAreaView forceInset={{top: 'always'}} style={ gpsStyles.container }>
+		<View forceInset={{top: 'always'}} style={ [gpsStyles.container, { flex: 1, width: Dimensions.get('screen').width }] }>
+			<View style= { [gpsStyles.mapView, { height: Dimensions.get('screen').height, width: Dimensions.get('screen').width }] }>
+				{ markers === null 
+				? (null)
+				: (	<MapView
+						style={gpsStyles.mapStyle}
+						region={{
+							latitude: homeLat,
+							longitude: homeLon,
+							latitudeDelta: 0.00022,
+							longitudeDelta: 0.00091
+						}}
+						onLongPress={ (event) => geofencingManagement(event.nativeEvent.coordinate.latitude, event.nativeEvent.coordinate.longitude ) }
+					>
+					<MapView.Circle
+						center = {{ latitude: homeLat, longitude: homeLon }}
+						radius = { radius }
+						strokeWidth = { 1 }
+						strokeColor = { '#1a66ff' }
+						fillColor = { 'rgba(230,238,255,0.5)' }
+        			/>
+					<MapView.Marker coordinate={{latitude: homeLat, longitude: homeLon}}>
+						<MaterialCommunityIcons name={'home'} size={ 20 } color={ '#2344CE' } />
+					</MapView.Marker>
+
+					{ markers.map((element, index) => {
+						if(index == 0) {
+							const data = new Date(element.coords.timestamp)
+							return (
+								<Marker
+									key={ element._id }
+									title={ `${element.isWifi ? 'Wi-fi' : 'GPRS'} - Estive aqui as ${data.getHours()}:${data.getMinutes()} - Dia: ${data.getDate()}/${data.getMonth()}` }
+									style={ gpsStyles.topInfoImg }
+									coordinate={{ latitude: element.coords.lat, longitude: element.coords.lon }} 
+									anchor={{ x: 0, y: 0 }}
+								>
+									<Image 
+										source={{ uri:'https://post.healthline.com/wp-content/uploads/sites/3/2020/02/322868_1100-1100x628.jpg' }} 
+										style={{ borderRadius: 15, height: 30, width: 30 }} 
+									/>
+								</Marker>
+							)
+						}})
+					}
+					{ 	(slider == 'history' || slider == '')
+						? (<Polyline 
+							coordinates={linesMarkers()}
+							strokeWidth={6}
+							strokeColor='rgba(26,102,255,0.3)'
+							/>)
+						: (null)
+					}
+					
+					</MapView>)
+				} 
+			</View>
+
 			<View style={ gpsStyles.topInfo }>
 				<View style={ gpsStyles.topInfoTexts }>
 					<View style={ gpsStyles.topInfoTextsTitle }>
@@ -292,18 +351,29 @@ export default function Gps() {
 					</View>
 					<View style={ gpsStyles.topInfoTextsSubtitle }>
 						<Text style={ gpsStyles.topInfoTextsSubtitleFont }>
-							{ markers ? (markers[0].isWifi ? 'Seu pet está dentro do seu Wi-fi' : (markers[0].isGeofencing ? 'Seu pet está na redondezas' : 'SEU PET SAIU SOCORORRORO')) : (null) }
+							{ markers ? (markers[0].isWifi ? 'Seu pet está dentro do seu Wi-fi' : (markers[0].isGeofencing ? 'Seu pet está por perto!' : 'SEU PET SAIU SOCORORRORO')) : (null) }
 						</Text>
-					</View>
-					<View style={ gpsStyles.topInfoTextsSubtitle }>
-						<Text style={ gpsStyles.topInfoTextsSubtitleFont }>{"A bateria está " + device.battery}</Text>
 					</View>
 				</View>
 				<View style={ gpsStyles.topInfoImg }>
 					<Image
 						style={ gpsStyles.topInfoImg }
-						source={ require('../../assets/dog.jpg') }
+						source={ require('../../assets/achapet_dog.png') }
 					/>
+					<View style={ gpsStyles.brtyView }>
+						<React.Fragment>
+							{
+								device.battery == 'Ruim' ? 
+								<Image source={ require('../../assets/lowBtry.png') } style={ gpsStyles.btryImg }/>
+								:
+								(device.battery == 'Carregada' ? 
+									<Image source={ require('../../assets/mediumBtry.png') } style={ gpsStyles.btryImg }/>
+									:
+									<Image source={ require('../../assets/goodBtry.png') } style={ gpsStyles.btryImg }/>
+								)
+							}
+						</React.Fragment>
+					</View>
 				</View>
 			</View>
 			<View style={ gpsStyles.middleInfo }>
@@ -357,62 +427,6 @@ export default function Gps() {
 					</View>) 
 				}
 				</View>
-	  		<View style= { gpsStyles.mapView }>
-				{ markers === null 
-				? (null)
-				: (	<MapView
-						style={gpsStyles.mapStyle}
-						region={{
-							latitude: homeLat,
-							longitude: homeLon,
-							latitudeDelta: 0.0022,
-							longitudeDelta: 0.0091
-						}}
-						onLongPress={ (event) => geofencingManagement(event.nativeEvent.coordinate.latitude, event.nativeEvent.coordinate.longitude ) }
-					>
-					<MapView.Circle
-						center = {{ latitude: homeLat, longitude: homeLon }}
-						radius = { radius }
-						strokeWidth = { 1 }
-						strokeColor = { '#1a66ff' }
-						fillColor = { 'rgba(230,238,255,0.5)' }
-        			/>
-					<MapView.Marker coordinate={{latitude: homeLat, longitude: homeLon}}>
-						<MaterialCommunityIcons name={'home'} size={ 20 } color={ '#2344CE' } />
-					</MapView.Marker>
-
-					{ markers.map((element, index) => {
-						if(index == 0) {
-							const data = new Date(element.coords.timestamp)
-							return (
-								<Marker
-									key={ element._id }
-									title={ `${element.isWifi ? 'Wi-fi' : 'GPRS'} - Estive aqui as ${data.getHours()}:${data.getMinutes()} - Dia: ${data.getDate()}/${data.getMonth()}` }
-									style={ gpsStyles.topInfoImg }
-									coordinate={{ latitude: element.coords.lat, longitude: element.coords.lon }} 
-									anchor={{ x: 0, y: 0 }}
-								>
-									<Image 
-										source={{ uri:'https://post.healthline.com/wp-content/uploads/sites/3/2020/02/322868_1100-1100x628.jpg' }} 
-										style={{ borderRadius: 15, height: 30, width: 30 }} 
-									/>
-								</Marker>
-							)
-						}})
-					}
-					{ 	(slider == 'history' || slider == '')
-						? (<Polyline 
-							coordinates={linesMarkers()}
-							strokeWidth={6}
-							strokeColor='rgba(26,102,255,0.3)'
-							/>)
-						: (null)
-					}
-					
-					</MapView>)
-				} 
-				
-			</View>
-		</SafeAreaView>
+		</View>
 	);
 }

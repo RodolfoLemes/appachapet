@@ -35,7 +35,7 @@ const deviceStyles = StyleSheet.create({
     titleText: {
         fontSize: 26,
         fontWeight: 'bold',
-        color: '#2147D6',
+        color: '#3f6de0',
     },
 
     itemTcb: {
@@ -67,7 +67,7 @@ const deviceStyles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
         borderBottomRightRadius: 25,
-        backgroundColor: '#2147D6',
+        backgroundColor: '#3f6de0',
         elevation: 4,
     },
 
@@ -107,7 +107,7 @@ const deviceStyles = StyleSheet.create({
         position: 'absolute',
         bottom: 20,
         left: 20,
-        backgroundColor: '#2147D6',
+        backgroundColor: '#3f6de0',
     },
 
     modalView: {
@@ -134,7 +134,7 @@ const deviceStyles = StyleSheet.create({
         paddingLeft: 20,
         borderWidth: 2,
         borderRadius: 10,
-        borderColor: '#2147D6',
+        borderColor: '#3f6de0',
         marginVertical: 15,
     },
 
@@ -145,7 +145,7 @@ const deviceStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginVertical: 5,
-        backgroundColor: '#2147D6',
+        backgroundColor: '#3f6de0',
     },
 
     registerTxt: {

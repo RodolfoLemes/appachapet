@@ -61,7 +61,7 @@ const dataStyles = StyleSheet.create({
         paddingLeft: 20,
         borderWidth: 2,
         borderRadius: 10,
-        borderColor: '#2344CE',
+        borderColor: '#3f6de0',
         marginVertical: 12,
     },
 
@@ -87,7 +87,7 @@ const dataStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        backgroundColor: '#2344CE',
+        backgroundColor: '#3f6de0',
         marginTop: 12,
     },
 

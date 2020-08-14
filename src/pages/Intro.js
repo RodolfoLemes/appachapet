@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, ImageBackground, StatusBar } from 'react-native';
+import { StyleSheet, View, ImageBackground, StatusBar } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -20,11 +20,11 @@ const slides = [ // Para a intro
 	}
 ];
 
-StatusBar.setBackgroundColor('#f1f4fd')
-
 export default function Intro() {
   
 	const [showRealApp, setShowRealApp] = useState(false)
+
+	StatusBar.setBackgroundColor('#f1f4fd')
 
 	const _renderItem = ({ item }) => {
 		return (
