@@ -27,8 +27,8 @@ export default function Gps() {
 	// States
 	const [markers, setMarkers] = useState(null)
 
-	const [time, setTime] = useState(0)
-	const [radius, setRadius] = useState(30)
+	const [time, setTime] = useState(24)
+	const [radius, setRadius] = useState(10)
 	const [radiusFriends, setRadiusFriends] = useState(300)
 	
 	const [maxValue, setMaxValue] = useState(100)
@@ -74,7 +74,8 @@ export default function Gps() {
 				let { geofencing } = response.data
 				setHomeLat(geofencing.coordCentralLat) // substituir por coords da home, obtido no banco de dados
 				setHomeLon(geofencing.coordCentralLon)
-				setRadius(geofencing.radius)
+				//setRadius(geofencing.radius)
+				setRadius(10)
 				setMarkers(markersArr)
 			} catch (error) {
 				console.log(error)
@@ -365,8 +366,8 @@ export default function Gps() {
 						region={{
 							latitude: homeLat,
 							longitude: homeLon,
-							latitudeDelta: 0.0022,
-							longitudeDelta: 0.0091
+							latitudeDelta: 0.00022,
+							longitudeDelta: 0.00091
 						}}
 						onLongPress={ (event) => geofencingManagement(event.nativeEvent.coordinate.latitude, event.nativeEvent.coordinate.longitude ) }
 					>

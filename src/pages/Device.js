@@ -27,7 +27,7 @@ export default function Device({ navigation }) {
 	function goToGPS(device) {
 		chosenDevice(device)
 		navigation.navigate('TabNavigation', { 
-			screen: 'Dados', /* trocar 'Dados' por 'GPS', deixei 'Dados' porque o GPS tá dando erro */
+			screen: 'GPS', /* trocar 'Dados' por 'GPS', deixei 'Dados' porque o GPS tá dando erro */
 			params: { 
 				device 
 			} 

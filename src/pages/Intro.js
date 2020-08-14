@@ -8,15 +8,15 @@ import Login from './Login'
 const slides = [ // Para a intro
 	{
 		key: 'one',
-	  image: require('../../assets/dog.jpg'),
+	  image: require('../../assets/1.jpeg'),
 	},
 	{
 		key: 'two',
-	  image: require('../../assets/dog.jpg'),
+	  image: require('../../assets/2.jpeg'),
 	},
 	{
 		key: 'tree',
-	  image: require('../../assets/dog.jpg'),
+	  image: require('../../assets/3.jpeg'),
 	}
 ];
 
@@ -37,7 +37,7 @@ export default function Intro() {
 	const _renderNextButton = () => {
 		return (
 		  <View style={styles.buttonCircle}>
-				<MaterialCommunityIcons name={'arrow-right-circle'} size={35} color={'white'} />
+				<MaterialCommunityIcons name={'arrow-right-circle'} size={35} color={'#2147D6'} />
 		  </View>
 		);
 	};
@@ -45,7 +45,7 @@ export default function Intro() {
 	const _renderDoneButton = () => {
 		return (
 		  <View style={styles.buttonCircle}>
-				<MaterialCommunityIcons name={'check-circle'} size={35} color={'white'} />
+				<MaterialCommunityIcons name={'check-circle'} size={35} color={'#2147D6'} />
 		  </View>
 		);
 	};

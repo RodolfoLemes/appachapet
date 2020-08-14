@@ -87,7 +87,7 @@ const gpsStyles = StyleSheet.create({
     },
 	
 	mapView: {
-        flex: 3,
+        flex: 3,  // o correto é 3
         width: '100%',
 		marginBottom: 20,
     },

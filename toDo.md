@@ -8,13 +8,13 @@
 	- [ ] Fazer artes
 	- [ ] Configurar para que apenas na primeira vez apareça a intro
 
-- [ ] Abrir Tela GPS ao abrir um dispositivo, e não Dados {Chel}
+- [x] Abrir Tela GPS ao abrir um dispositivo, e não Dados {Chel}
 
-- [ ] Mexer na telas de Dados (o que ficará vizível?). O que não for para ser editável, aparece do lado da foto do cachorro {Chel}
+- [x] Mexer na telas de Dados (o que ficará vizível?). O que não for para ser editável, aparece do lado da foto do cachorro {Chel}
 
 - [ ] Colocar Maps como backGround, na tela GPS {Chel e Nardo}
 
-- [ ] Colocar default o raio (10m) e histórico (24h), na tela GPS {Chel}
+- [x] Colocar default o raio (10m) e histórico (24h), na tela GPS {Chel}
 
 - [ ] Trocar ícones, para a bateria, na tela GPS {Nardo}
   - [ ] Boa Carregada Ruim
