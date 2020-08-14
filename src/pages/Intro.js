@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground, StatusBar } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -8,17 +8,19 @@ import Login from './Login'
 const slides = [ // Para a intro
 	{
 		key: 'one',
-	  image: require('../../assets/dog.jpg'),
+	  image: require('../../assets/Tela1.png'),
 	},
 	{
 		key: 'two',
-	  image: require('../../assets/dog.jpg'),
+	  image: require('../../assets/Tela2.png'),
 	},
 	{
 		key: 'tree',
-	  image: require('../../assets/dog.jpg'),
+	  image: require('../../assets/Tela3.png'),
 	}
 ];
+
+StatusBar.setBackgroundColor('#f1f4fd')
 
 export default function Intro() {
   
@@ -37,7 +39,7 @@ export default function Intro() {
 	const _renderNextButton = () => {
 		return (
 		  <View style={styles.buttonCircle}>
-				<MaterialCommunityIcons name={'arrow-right-circle'} size={35} color={'white'} />
+				<MaterialCommunityIcons name={'arrow-right-circle'} size={35} color={'#00418F'} />
 		  </View>
 		);
 	};
@@ -45,7 +47,7 @@ export default function Intro() {
 	const _renderDoneButton = () => {
 		return (
 		  <View style={styles.buttonCircle}>
-				<MaterialCommunityIcons name={'check-circle'} size={35} color={'white'} />
+				<MaterialCommunityIcons name={'check-circle'} size={35} color={'#00418F'} />
 		  </View>
 		);
 	};
@@ -60,6 +62,7 @@ export default function Intro() {
 				onDone={_onDone}
 				renderDoneButton={_renderDoneButton}
 				renderNextButton={_renderNextButton}
+				activeDotStyle={{ backgroundColor: '#00418F' }}
 			/>
 		)
 	}
