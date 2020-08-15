@@ -92,7 +92,6 @@ export default function Login() {
 	StatusBar.setBackgroundColor('#3f6de0')
 
 	return (
-		
 		<SafeAreaView forceInset={{top: 'always'}} style={ loginStyles.container }>
 			<TouchableOpacity style={ loginStyles.logoView } onPress={login}>
 				<Animated.Image

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ImageBackground, StatusBar } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Login from './Login'
 
@@ -21,8 +22,17 @@ const slides = [ // Para a intro
 ];
 
 export default function Intro() {
-  
-	const [showRealApp, setShowRealApp] = useState(false)
+
+	const [skip, isSkip] = useState('0')
+
+	useEffect(() => {
+		async function verifyIntro() {
+			const skipIntro = await AsyncStorage.getItem('@intro') || '0'
+			isSkip(skipIntro)
+		}
+
+		verifyIntro()
+	}, [])
 
 	StatusBar.setBackgroundColor('#f1f4fd')
 
@@ -32,8 +42,9 @@ export default function Intro() {
 		);
 	}
 	
-	const _onDone = () => {
-		setShowRealApp(true)
+	const _onDone = async () => {
+		await AsyncStorage.setItem('@intro', '1')
+		isSkip(true)
 	}
 	
 	const _renderNextButton = () => {
@@ -52,7 +63,7 @@ export default function Intro() {
 		);
 	};
 
-	if (showRealApp) {
+	if (skip == '1') {
 		return <Login />;
 	} else {
 		return(
