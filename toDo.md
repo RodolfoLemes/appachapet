@@ -4,22 +4,22 @@
 
 - [ ] Adicionar links nos botões de redes sociais na tela de login e deixar eles mais bonitos {Nardo}
 
-- [ ] Fazer introdução do aplicativo
-	- [ ] Fazer artes
+- [x] Fazer introdução do aplicativo
+	- [x] Fazer artes
 	- [ ] Configurar para que apenas na primeira vez apareça a intro
 
 - [x] Abrir Tela GPS ao abrir um dispositivo, e não Dados {Chel}
 
 - [x] Mexer na telas de Dados (o que ficará vizível?). O que não for para ser editável, aparece do lado da foto do cachorro {Chel}
 
-- [ ] Colocar Maps como backGround, na tela GPS {Chel e Nardo}
+- [x] Colocar Maps como backGround, na tela GPS {Chel e Nardo}
 
 - [x] Colocar default o raio (10m) e histórico (24h), na tela GPS {Chel}
 
-- [ ] Trocar ícones, para a bateria, na tela GPS {Nardo}
-  - [ ] Boa Carregada Ruim
+- [x] Trocar ícones, para a bateria, na tela GPS {Nardo}
+  - [x] Boa Carregada Ruim
 
-- [ ] Fazer artes para tela Info {Nardo}
+- [x] Fazer artes para tela Info {Nardo}
 
 
 ## A fazer no futuro

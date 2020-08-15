@@ -25,55 +25,54 @@ const Tab = createBottomTabNavigator();
 function TabNavigation() {
 	return (
 		<Tab.Navigator
-				screenOptions={({ route }) => ({
-					tabBarIcon: ({ focused, color, size }) => {
-						let iconName;
-						if (route.name === 'Atividade') {
-							iconName = focused
-							? 'chart-line'
-							: 'chart-line';
-						} 
-						else if (route.name === 'GPS') {
-							iconName = focused 
-							? 'map-marker' 
-							: 'map-marker';
-						}
-						else if (route.name === 'Dados') {
-							iconName = focused 
-							? 'paw' 
-							: 'paw';
-						}
-						else if (route.name === 'Info') {
-							iconName = focused 
-							? 'information-outline' 
-							: 'information-outline';
-						}
-						return <MaterialCommunityIcons name={iconName} size={50} color={color} />
-					}}
-				)}
-				tabBarOptions={{
-					activeTintColor: '#3f6de0',
-					inactiveTintColor: 'gray',
-					style: {
-						position: 'absolute', //GPS
-						bottom: 0, //GPS
-						left: 0, //GPS
-						height: 70,
-						elevation:0,
-						borderTopWidth: 0,
-						shadowOpacity:0,
-						marginBottom: 5,
-						backgroundColor: 'transparent', //GPS (normal é #FFF)
-					},
-					keyboardHidesTabBar: true,
-				}}
-				
-				>
-				{ /*<Tab.Screen name="Atividade" component={Activity} /> */ }
-				<Tab.Screen name='Info' component={Info} />
-				<Tab.Screen name="GPS" component={Gps} />
-				<Tab.Screen name="Dados" component={Data} 
-				/>
+			screenOptions={({ route }) => ({
+				tabBarIcon: ({ focused, color, size }) => {
+					let iconName;
+					if (route.name === 'Atividade') {
+						iconName = focused
+						? 'chart-line'
+						: 'chart-line';
+					} 
+					else if (route.name === 'GPS') {
+						iconName = focused 
+						? 'map-marker' 
+						: 'map-marker';
+					}
+					else if (route.name === 'Dados') {
+						iconName = focused 
+						? 'paw' 
+						: 'paw';
+					}
+					else if (route.name === 'Info') {
+						iconName = focused 
+						? 'information-outline' 
+						: 'information-outline';
+					}
+					return <MaterialCommunityIcons name={iconName} size={50} color={color} />
+				}
+			})}
+			tabBarOptions={{
+				activeTintColor: '#3f6de0',
+				inactiveTintColor: 'gray',
+				style: {
+					position: 'absolute', //GPS
+					bottom: 0, //GPS
+					left: 0, //GPS
+					height: 70,
+					elevation:0,
+					borderTopWidth: 0,
+					shadowOpacity:0,
+					marginBottom: 5,
+					backgroundColor: 'transparent', //GPS (normal é #FFF)
+				},
+				keyboardHidesTabBar: true,
+			}}
+		>
+			{ /*<Tab.Screen name="Atividade" component={Activity} /> */ }
+			<Tab.Screen name='Info' component={Info} />
+			<Tab.Screen name="GPS" component={Gps} />
+			<Tab.Screen name="Dados" component={Data} 
+			/>
 		</Tab.Navigator>
 	)
 }
@@ -87,7 +86,8 @@ const HomeRoutes = () => (
 		<StackHome.Screen 
 			name='TabNavigation' 
 			component={ TabNavigation }
-			options={({ navigation }) => ({
+			options={({ navigation, route }) => {
+				return ({
 				headerStyle: {
 					elevation: 0,
 				},
@@ -101,8 +101,8 @@ const HomeRoutes = () => (
 						<MaterialCommunityIcons name={'reply'} size={50} color={'#3f6de0'} />
 					</TouchableOpacity>
 				),
-				headerTransparent: true,
-			})}
+				headerTransparent: route.state ? (route.state.index === 1 ? true : false) : true,
+			})}}
 			
 		/>
 	</StackHome.Navigator>

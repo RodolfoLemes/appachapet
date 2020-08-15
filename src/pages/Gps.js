@@ -74,8 +74,8 @@ export default function Gps() {
 				let { geofencing } = response.data
 				setHomeLat(geofencing.coordCentralLat) // substituir por coords da home, obtido no banco de dados
 				setHomeLon(geofencing.coordCentralLon)
-				//setRadius(geofencing.radius)
-				setRadius(10)
+				setRadius(geofencing.radius)
+				//setRadius(10)
 				setMarkers(markersArr)
 			} catch (error) {
 				console.log(error)
@@ -282,7 +282,7 @@ export default function Gps() {
 		)
 	}
 
-StatusBar.setBackgroundColor('rgba(0,0,0,0)')
+	StatusBar.setBackgroundColor('rgba(0,0,0,0)')
 
 	return (
 		<View forceInset={{top: 'always'}} style={ [gpsStyles.container, { flex: 1, width: Dimensions.get('screen').width }] }>
@@ -311,6 +311,7 @@ StatusBar.setBackgroundColor('rgba(0,0,0,0)')
 					</MapView.Marker>
 
 					{ markers.map((element, index) => {
+						console.log(element)
 						if(index == 0) {
 							const data = new Date(element.coords.timestamp)
 							return (
@@ -346,12 +347,12 @@ StatusBar.setBackgroundColor('rgba(0,0,0,0)')
 				<View style={ gpsStyles.topInfoTexts }>
 					<View style={ gpsStyles.topInfoTextsTitle }>
 						<Text style={ gpsStyles.topInfoTextsTitleFont }>
-							{ markers ? (markers[0].isWifi ? 'Tudo certo' : (markers[0].isGeofencing ? 'Tudo certo' : 'ALERTA PRETO')) : (null) }
+							{ markers ? (markers[0]?.isWifi ? 'Tudo certo' : (markers[0]?.isGeofencing ? 'Tudo certo' : 'ALERTA LILÁS')) : ('Olá') }
 						</Text>
 					</View>
 					<View style={ gpsStyles.topInfoTextsSubtitle }>
 						<Text style={ gpsStyles.topInfoTextsSubtitleFont }>
-							{ markers ? (markers[0].isWifi ? 'Seu pet está dentro do seu Wi-fi' : (markers[0].isGeofencing ? 'Seu pet está por perto!' : 'SEU PET SAIU SOCORORRORO')) : (null) }
+							{ markers ? (markers[0]?.isWifi ? 'Seu pet está dentro do seu Wi-fi' : (markers[0]?.isGeofencing ? 'Seu pet está por perto!' : 'SEU PET SAIU SOCORORRORO')) : ('Humano bobo') }
 						</Text>
 					</View>
 				</View>
