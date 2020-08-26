@@ -23,10 +23,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.achapet"
     },
     "android": {
-      "package": "com.achapet"
+      "package": "com.achapet",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAM60bUNM3B_XIzxwDxdfKT6PT-Z4JZ_xY"
+        }
+      }
     }
   }
 }
