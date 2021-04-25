@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 const infoStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -21,8 +21,8 @@ const infoStyles = StyleSheet.create({
   },
 
   middleInfoView: {
-    marginTop: '10%'
-  }
-})
+    marginTop: '10%',
+  },
+});
 
-export default infoStyles
+export default infoStyles;

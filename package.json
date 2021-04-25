@@ -7,6 +7,11 @@
     "web": "expo start --web",
     "eject": "expo eject"
   },
+  "contributors": [
+    "Leonardo Armelin <leonardo.armelin99@gmail.com>",
+    "Leonichel Guimarães <leonichelg@gmail.com>",
+    "Rodolfo Lemes <rodolfo_fero@hotmail.com>"
+  ],
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
     "@miblanchard/react-native-slider": "^1.2.2",

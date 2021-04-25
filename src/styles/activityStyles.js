@@ -1,111 +1,111 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 import {
-	responsiveHeight,
-	responsiveWidth,
-	responsiveFontSize
-  	} from "react-native-responsive-dimensions";
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 
 const activityStyles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width: '100%',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#FFF',
-    },
+  container: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+  },
 
-    topInfo: {
-        height: 100,
-        width: '85%',
-        flexDirection: 'row',
-        marginBottom: 5,
-        marginLeft: '5%',
-    },
+  topInfo: {
+    height: 100,
+    width: '85%',
+    flexDirection: 'row',
+    marginBottom: 5,
+    marginLeft: '5%',
+  },
 
-    topInfoImg: {
-        height: 100,
-        width: 100,
-        borderRadius: 50,
-    },
+  topInfoImg: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+  },
 
-    topInfoTexts: {
-        height: 100,
-        flex: 1,
-        paddingLeft: 10,
-    },
+  topInfoTexts: {
+    height: 100,
+    flex: 1,
+    paddingLeft: 10,
+  },
 
-    topInfoTextsTitle: {
-        height: 40,
-        width: '100%',
-        justifyContent: 'center',
-    },
+  topInfoTextsTitle: {
+    height: 40,
+    width: '100%',
+    justifyContent: 'center',
+  },
 
-    topInfoTextsSubtitle: {
-        height: 60,
-        width: '100%',
-    },
+  topInfoTextsSubtitle: {
+    height: 60,
+    width: '100%',
+  },
 
-    topInfoTextsTitleFont: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
+  topInfoTextsTitleFont: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
 
-    topInfoTextsSubtitleFont: {
-        fontSize: 16,
-	},
-	
-	middleInfo: {
-        height: responsiveHeight(30),
-        width: responsiveWidth(75),
-		marginTop: responsiveHeight(5),
-    },
-    
-    middleInfoLabel: {
-        height: '20%',
-        width: '100%',
-        justifyContent: 'center',
-    },
+  topInfoTextsSubtitleFont: {
+    fontSize: 16,
+  },
 
-    middleInfoInformation: {
-        height: '45%',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+  middleInfo: {
+    height: responsiveHeight(30),
+    width: responsiveWidth(75),
+    marginTop: responsiveHeight(5),
+  },
 
-    middleInfoPack: {
-        height: '35%',
-        width: '100%',
-        flexDirection: 'row',
-    },
+  middleInfoLabel: {
+    height: '20%',
+    width: '100%',
+    justifyContent: 'center',
+  },
 
-    middleInfoPackView: {
-        height: '100%',
-        flex: 1,
-        paddingLeft: '5%',
-    },
+  middleInfoInformation: {
+    height: '45%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
-    middleInfoLabelText: {
-        fontSize: 18,
-    },
+  middleInfoPack: {
+    height: '35%',
+    width: '100%',
+    flexDirection: 'row',
+  },
 
-    middleInfoInformationText: {
-        fontSize: 52,
-    },
+  middleInfoPackView: {
+    height: '100%',
+    flex: 1,
+    paddingLeft: '5%',
+  },
 
-    middleInfoPackTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
+  middleInfoLabelText: {
+    fontSize: 18,
+  },
 
-    middleInfoPackSubtitle: {
-        fontSize: 18,
-    },
+  middleInfoInformationText: {
+    fontSize: 52,
+  },
 
-    chartInfo: {
-        height: responsiveHeight(30),
-        width: responsiveWidth(90),
-    },
-})
+  middleInfoPackTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  middleInfoPackSubtitle: {
+    fontSize: 18,
+  },
+
+  chartInfo: {
+    height: responsiveHeight(30),
+    width: responsiveWidth(90),
+  },
+});
 
 export default activityStyles;
